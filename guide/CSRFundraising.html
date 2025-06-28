@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSR Fundraising Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .header-bg {
+            background-color: #003366; /* IPN Blue */
+        }
+        .brand-orange {
+            color: #FF6600; /* IPN Orange */
+        }
+        .brand-blue {
+            color: #003366;
+        }
+        .btn-primary {
+            background-color: #FF6600;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #E65C00;
+        }
+        .accordion-button {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E0E0;
+        }
+        .accordion-button.open {
+             background-color: #E7F0F7; /* Lighter blue for active state */
+             border-left: 4px solid #003366;
+        }
+        .accordion-content {
+            background-color: #FFFFFF;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1.5rem;
+        }
+        .accordion-content.open {
+             padding: 1.5rem;
+        }
+        .quiz-option.selected {
+            background-color: #E7F0F7;
+            border-color: #003366;
+        }
+        .correct-answer {
+             background-color: #D4EDDA !important;
+             border-color: #155724 !important;
+        }
+        .wrong-answer {
+             background-color: #F8D7DA !important;
+             border-color: #721c24 !important;
+        }
+        /* Custom styles for the language selector */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+        .language-selector select {
+            background-color: #FFFFFF;
+            color: #003366;
+            padding: 8px 32px 8px 16px;
+            border: 1px solid #CED4DA;
+            border-radius: 4px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        .language-selector::after {
+            content: '▼';
+            font-size: 12px;
+            color: #003366;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="header-bg shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                 <h1 class="text-2xl font-bold text-white" data-key="title">Understanding <span class="brand-orange">CSR</span> Expectations</h1>
+            </div>
+            <div class="language-selector">
+                <select id="languageSelector" onchange="changeLanguage()" class="font-semibold">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+            <h2 class="text-2xl font-bold brand-blue mb-2" data-key="guide_intro_title">A Step-by-Step Guide to CSR Fundraising</h2>
+            <p class="text-gray-600" data-key="guide_intro_desc">This guide provides best practices and tips from industry leaders to help non-profits foster stronger relationships with their corporate donors. Navigate through the steps to enhance your organization's CSR readiness.</p>
+        </div>
+
+        <!-- Accordion Guide -->
+        <div id="accordionContainer" class="space-y-4">
+            <!-- Steps will be injected here by JavaScript -->
+        </div>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="mt-12 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold brand-blue mb-4" data-key="quiz_title">Test Your Knowledge</h2>
+            <p class="text-gray-600 mb-6" data-key="quiz_desc">Answer these five questions to see if you've understood the key best practices for CSR fundraising.</p>
+            <div id="quizContainer" class="space-y-6">
+                <!-- Quiz questions will be injected here -->
+            </div>
+            <button id="submitQuizBtn" class="btn-primary font-bold py-2 px-6 rounded-lg mt-6 w-full md:w-auto" data-key="submit_button">Submit Answers</button>
+            <div id="quizResult" class="mt-6 text-xl font-bold text-center"></div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-200 mt-12 py-6">
+        <div class="container mx-auto text-center text-gray-600">
+            <p data-key="footer_text">Guide based on "Understanding CSR Expectations on Fundraising" by India Partner Network.</p>
+        </div>
+    </footer>
+
+<script>
+    // --- TRANSLATION DATA ---
+    const translations = {
+        en: {
+            title: "Understanding <span class='brand-orange'>CSR</span> Expectations",
+            guide_intro_title: "A Step-by-Step Guide to CSR Fundraising",
+            guide_intro_desc: "This guide provides best practices and tips from industry leaders to help non-profits foster stronger relationships with their corporate donors. Navigate through the steps to enhance your organization's CSR readiness.",
+            quiz_title: "Test Your Knowledge",
+            quiz_desc: "Answer these five questions to see if you've understood the key best practices for CSR fundraising.",
+            submit_button: "Submit Answers",
+            footer_text: "Guide based on \"Understanding CSR Expectations on Fundraising\" by India Partner Network.",
+            // Steps
+            step_1_title: "Step 1: What do corporates consider for CSR donations?",
+            step_1_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">Key Considerations:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>Strategic Alignment:</strong> Proposals must align with the corporate's CSR policy and business values.</li>
+                    <li><strong>Legal Compliance:</strong> Adherence to the CSR Act and relevant laws is critical.</li>
+                    <li><strong>Geographical and Operational Context:</strong> Activities should fit the local legal frameworks and cultural contexts.</li>
+                    <li><strong>Thematic Areas:</strong> Align with causes that resonate with the corporate's business.</li>
+                    <li><strong>Impact Tracking:</strong> Donors expect mechanisms to monitor and report outcomes.</li>
+                </ul>
+                <h3 class="font-semibold text-lg brand-blue mt-4 mb-2">Common Challenges for Corporates:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>Navigating diverse regulations in different countries.</li>
+                    <li>Ensuring CSR activities align with both corporate strategy and local needs.</li>
+                    <li>Measuring the real impact of initiatives.</li>
+                    <li>Balancing resource allocation between business and CSR.</li>
+                    <li>Managing expectations of various stakeholders.</li>
+                </ul>
+            `,
+            step_2_title: "Step 2: What does an ideal CSR proposal look like?",
+            step_2_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">Key Components:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>Clear Concept:</strong> Clearly state what you want to achieve with achievable outputs.</li>
+                    <li><strong>Clarity and Precision:</strong> Be concise and to the point. Stick to essential details.</li>
+                    <li><strong>Detailed Documentation:</strong> Provide project plans, financials, and compliance documents.</li>
+                    <li><strong>M&E Strategy:</strong> Proactively share your Monitoring and Evaluation strategy.</li>
+                    <li><strong>Alignment with Donor Practices:</strong> Understand the donor's practices and policies before proposing.</li>
+                    <li><strong>Passion and Commitment:</strong> Your dedication to the project's success must be evident.</li>
+                    <li><strong>Impact Focus:</strong> Emphasize the potential impact, supported by data and clear outcomes.</li>
+                </ul>
+            `,
+            step_3_title: "Step 3: How to ensure a long-term association with donors?",
+            step_3_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">Building Strong Relationships:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>Foster Enthusiasm:</strong> Show genuine passion and highlight the potential for scaling the project.</li>
+                    <li><strong>Close Collaboration:</strong> Work closely with the partner to build a shared vision and mutual trust.</li>
+                    <li><strong>Transparent Communication:</strong> Be honest about progress, roadblocks, and issues.</li>
+                    <li><strong>Engage Leadership:</strong> Facilitate meetings between non-profit founders and corporate leadership.</li>
+                    <li><strong>Commitment to Long-Term Goals:</strong> Show commitment to shared objectives and be proactive about future plans.</li>
+                </ul>
+            `,
+            step_4_title: "Step 4: How can partnership forums help?",
+            step_4_content: `
+                 <h3 class="font-semibold text-lg brand-blue mb-2">Benefits of Forums:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>Partner Convergence:</strong> Connect with partners the corporate has previously worked with, extending relationships beyond funding.</li>
+                    <li><strong>Networking with Experts:</strong> Gain valuable knowledge and innovative ideas from experts and peers.</li>
+                    <li><strong>Collaboration and Sharing:</strong> Share best practices and collaborate to create a larger impact.</li>
+                    <li><strong>Community Engagement:</strong> Involve community stakeholders to understand their needs and challenges directly.</li>
+                </ul>
+            `,
+            step_5_title: "Step 5: How to increase engagement with corporate leaders?",
+            step_5_content: `
+                 <h3 class="font-semibold text-lg brand-blue mb-2">Engagement Strategies:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>Involve the Community:</strong> Let community members share their impact experiences directly with leaders.</li>
+                    <li><strong>Engage the Board:</strong> Keep board members informed with regular updates, pictures, and videos.</li>
+                    <li><strong>Facilitate Volunteer Opportunities:</strong> Encourage hands-on involvement to deepen their connection to the cause.</li>
+                    <li><strong>Provide Insights through Case Studies:</strong> Use real-world examples to illustrate success stories.</li>
+                    <li><strong>Create Engaging Presentations:</strong> Use clear, visually compelling presentations to communicate your mission.</li>
+                </ul>
+            `,
+            step_6_title: "Step 6: Where to discover corporate donors?",
+            step_6_content: `
+                 <h3 class="font-semibold text-lg brand-blue mb-2">Discovery Platforms:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>National CSR Portals:</strong> Use official portals to find data on corporate CSR spending.</li>
+                    <li><strong>Research and Due Diligence:</strong> Thoroughly research corporates to find a good match for your cause.</li>
+                    <li><strong>Professional and Networking Forums:</strong> Engage on platforms like India Partner Network (IPN) and LinkedIn.</li>
+                    <li><strong>Industry Bodies and Events:</strong> Participate in events hosted by NASSCOM, CSRBox, etc.</li>
+                    <li><strong>Social Media:</strong> Use platforms like LinkedIn to reach out professionally.</li>
+                    <li><strong>Collaboration with Existing Partners:</strong> Leverage your current partners to expand your network.</li>
+                </ul>
+            `,
+             // Quiz Questions and Answers
+            q1_question: "What is the most crucial element a corporate looks for in a CSR proposal?",
+            q1_option_a: "A very long and detailed report.",
+            q1_option_b: "Strategic alignment with their own CSR policy and values.",
+            q1_option_c: "A request for the maximum possible funding.",
+            q1_option_d: "A proposal written by a famous consultant.",
+            q2_question: "To ensure a long-term relationship with a donor, a non-profit should:",
+            q2_option_a: "Only contact them when funding is needed.",
+            q2_option_b: "Avoid sharing any bad news or challenges.",
+            q2_option_c: "Maintain transparent communication and show commitment to shared goals.",
+            q2_option_d: "Limit interaction to email only.",
+            q3_question: "Who should ideally define the Monitoring & Evaluation (M&E) strategy for a project?",
+            q3_option_a: "The corporate donor should create it for the non-profit.",
+            q3_option_b: "The non-profit should proactively share its own M&E strategy.",
+            q3_option_c: "An external third-party auditor.",
+            q3_option_d: "M&E is not necessary for small projects.",
+            q4_question: "What is an effective way to engage corporate leaders emotionally with your cause?",
+            q4_option_a: "Sending only financial reports.",
+            q4_option_b: "Organizing volunteer opportunities and sharing community impact stories.",
+            q4_option_c: "Inviting them to a formal gala dinner.",
+            q4_option_d: "Asking for their autograph.",
+            q5_question: "Which of these is NOT a recommended platform for discovering new corporate donors?",
+            q5_option_a: "National CSR Portals.",
+            q5_option_b: "Professional networking forums like LinkedIn.",
+            q5_option_c: "Cold calling random company receptionists.",
+            q5_option_d: "Industry body events and conferences.",
+            result_message_prefix: "You scored ",
+            result_message_suffix: " out of 5.",
+        },
+        hi: {
+            title: "CSR अपेक्षाओं को समझना",
+            guide_intro_title: "सीएसआर धन उगाही के लिए एक कदम-दर-कदम गाइड",
+            guide_intro_desc: "यह गाइड गैर-लाभकारी संस्थाओं को उनके कॉर्पोरेट दाताओं के साथ मजबूत संबंध बनाने में मदद करने के लिए उद्योग के नेताओं से सर्वोत्तम प्रथाओं और युक्तियों को प्रदान करता है। अपने संगठन की सीएसआर तत्परता को बढ़ाने के लिए चरणों के माध्यम से नेविगेट करें।",
+            quiz_title: "अपने ज्ञान का परीक्षण करें",
+            quiz_desc: "यह देखने के लिए इन पांच सवालों के जवाब दें कि क्या आपने सीएसआर धन उगाही के लिए प्रमुख सर्वोत्तम प्रथाओं को समझा है।",
+            submit_button: "उत्तर जमा करें",
+            footer_text: "इंडिया पार्टनर नेटवर्क द्वारा \"सीएसआर धन उगाही पर अपेक्षाओं को समझना\" पर आधारित गाइड।",
+            step_1_title: "चरण 1: कॉर्पोरेट सीएसआर दान के लिए क्या विचार करते हैं?",
+            step_1_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">मुख्य विचार:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>रणनीतिक संरेखण:</strong> प्रस्तावों को कॉर्पोरेट की सीएसआर नीति और व्यावसायिक मूल्यों के साथ संरेखित होना चाहिए।</li>
+                    <li><strong>कानूनी अनुपालन:</strong> सीएसआर अधिनियम और प्रासंगिक कानूनों का पालन महत्वपूर्ण है।</li>
+                    <li><strong>भौगोलिक और परिचालन संदर्भ:</strong> गतिविधियां स्थानीय कानूनी ढांचे और सांस्कृतिक संदर्भों के अनुकूल होनी चाहिए।</li>
+                    <li><strong>विषयगत क्षेत्र:</strong> कॉर्पोरेट के व्यवसाय के साथ प्रतिध्वनित होने वाले कारणों से संरेखित करें।</li>
+                    <li><strong>प्रभाव ट्रैकिंग:</strong> दाता परिणामों की निगरानी और रिपोर्ट करने के लिए तंत्र की उम्मीद करते हैं।</li>
+                </ul>
+                <h3 class="font-semibold text-lg brand-blue mt-4 mb-2">कॉर्पोरेट्स के लिए आम चुनौतियां:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>विभिन्न देशों में विविध नियमों को नेविगेट करना।</li>
+                    <li>यह सुनिश्चित करना कि सीएसआर गतिविधियां कॉर्पोरेट रणनीति और स्थानीय जरूरतों दोनों के साथ संरेखित हों।</li>
+                    <li>पहल के वास्तविक प्रभाव को मापना।</li>
+                    <li>व्यापार और सीएसआर के बीच संसाधन आवंटन को संतुलित करना।</li>
+                    <li>विभिन्न हितधारकों की अपेक्षाओं का प्रबंधन करना।</li>
+                </ul>
+            `,
+            step_2_title: "चरण 2: एक आदर्श सीएसआर प्रस्ताव कैसा दिखता है?",
+            step_2_content: `
+                 <h3 class="font-semibold text-lg brand-blue mb-2">मुख्य घटक:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>स्पष्ट अवधारणा:</strong> स्पष्ट रूप से बताएं कि आप प्राप्य आउटपुट के साथ क्या हासिल करना चाहते हैं।</li>
+                    <li><strong>स्पष्टता और सटीकता:</strong> संक्षिप्त और सटीक रहें। आवश्यक विवरणों पर टिके रहें।</li>
+                    <li><strong>विस्तृत दस्तावेज़ीकरण:</strong> परियोजना योजनाएं, वित्तीय और अनुपालन दस्तावेज़ प्रदान करें।</li>
+                    <li><strong>एम एंड ई रणनीति:</strong> अपनी निगरानी और मूल्यांकन रणनीति को सक्रिय रूप से साझा करें।</li>
+                    <li><strong>दाता प्रथाओं के साथ संरेखण:</strong> प्रस्ताव देने से पहले दाता के प्रथाओं और नीतियों को समझें।</li>
+                    <li><strong>जुनून और प्रतिबद्धता:</strong> परियोजना की सफलता के प्रति आपका समर्पण स्पष्ट होना चाहिए।</li>
+                    <li><strong>प्रभाव फोकस:</strong> डेटा और स्पष्ट परिणामों द्वारा समर्थित संभावित प्रभाव पर जोर दें।</li>
+                </ul>
+            `,
+            step_3_title: "चरण 3: दाताओं के साथ दीर्घकालिक जुड़ाव कैसे सुनिश्चित करें?",
+            step_3_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">मजबूत संबंध बनाना:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>उत्साह को बढ़ावा दें:</strong> वास्तविक जुनून दिखाएं और परियोजना को बढ़ाने की क्षमता को उजागर करें।</li>
+                    <li><strong>घनिष्ठ सहयोग:</strong> एक साझा दृष्टि और आपसी विश्वास बनाने के लिए साथी के साथ मिलकर काम करें।</li>
+                    <li><strong>पारदर्शी संचार:</strong> प्रगति, बाधाओं और मुद्दों के बारे में ईमानदार रहें।</li>
+                    <li><strong>नेतृत्व को शामिल करें:</strong> गैर-लाभकारी संस्थापकों और कॉर्पोरेट नेतृत्व के बीच बैठकों की सुविधा प्रदान करें।</li>
+                    <li><strong>दीर्घकालिक लक्ष्यों के प्रति प्रतिबद्धता:</strong> साझा उद्देश्यों के प्रति प्रतिबद्धता दिखाएं और भविष्य की योजनाओं के बारे में सक्रिय रहें।</li>
+                </ul>
+            `,
+            step_4_title: "चरण 4: साझेदारी मंच कैसे मदद कर सकते हैं?",
+            step_4_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">मंचों के लाभ:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>साझेदार अभिसरण:</strong> उन भागीदारों से जुड़ें जिनके साथ कॉर्पोरेट ने पहले काम किया है, फंडिंग से परे संबंधों का विस्तार करें।</li>
+                    <li><strong>विशेषज्ञों के साथ नेटवर्किंग:</strong> विशेषज्ञों और साथियों से बहुमूल्य ज्ञान और नवीन विचार प्राप्त करें।</li>
+                    <li><strong>सहयोग और साझाकरण:</strong> सर्वोत्तम प्रथाओं को साझा करें और एक बड़ा प्रभाव बनाने के लिए सहयोग करें।</li>
+                    <li><strong>सामुदायिक जुड़ाव:</strong> सामुदायिक हितधारकों को उनकी जरूरतों और चुनौतियों को सीधे समझने के लिए शामिल करें।</li>
+                </ul>
+            `,
+            step_5_title: "चरण 5: कॉर्पोरेट नेताओं के साथ जुड़ाव कैसे बढ़ाएं?",
+            step_5_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">सगाई की रणनीतियाँ:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>समुदाय को शामिल करें:</strong> समुदाय के सदस्यों को सीधे नेताओं के साथ अपने प्रभाव के अनुभव साझा करने दें।</li>
+                    <li><strong>बोर्ड को शामिल करें:</strong> बोर्ड के सदस्यों को नियमित अपडेट, चित्रों और वीडियो के साथ सूचित रखें।</li>
+                    <li><strong>स्वयंसेवी अवसरों की सुविधा प्रदान करें:</strong> कारण से उनके संबंध को गहरा करने के लिए व्यावहारिक भागीदारी को प्रोत्साहित करें।</li>
+                    <li><strong>केस स्टडी के माध्यम से अंतर्दृष्टि प्रदान करें:</strong> सफलता की कहानियों को स्पष्ट करने के लिए वास्तविक दुनिया के उदाहरणों का उपयोग करें।</li>
+                    <li><strong>आकर्षक प्रस्तुतियाँ बनाएँ:</strong> अपने मिशन को संप्रेषित करने के लिए स्पष्ट, आकर्षक दृश्यों का उपयोग करें।</li>
+                </ul>
+            `,
+            step_6_title: "चरण 6: कॉर्पोरेट दाताओं की खोज कहाँ करें?",
+            step_6_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">खोज मंच:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>राष्ट्रीय सीएसआर पोर्टल:</strong> कॉर्पोरेट सीएसआर खर्च पर डेटा खोजने के लिए आधिकारिक पोर्टलों का उपयोग करें।</li>
+                    <li><strong>अनुसंधान और उचित परिश्रम:</strong> अपने कारण के लिए एक अच्छा मैच खोजने के लिए कॉर्पोरेट्स पर पूरी तरह से शोध करें।</li>
+                    <li><strong>पेशेवर और नेटवर्किंग मंच:</strong> इंडिया पार्टनर नेटवर्क (आईपीएन) और लिंक्डइन जैसे प्लेटफार्मों पर संलग्न हों।</li>
+                    <li><strong>उद्योग निकाय और कार्यक्रम:</strong> नैसकॉम, सीएसआरबॉक्स, आदि द्वारा आयोजित कार्यक्रमों में भाग लें।</li>
+                    <li><strong>सोशल मीडिया:</strong> पेशेवर रूप से पहुंचने के लिए लिंक्डइन जैसे प्लेटफार्मों का उपयोग करें।</li>
+                    <li><strong>मौजूदा भागीदारों के साथ सहयोग:</strong> अपने नेटवर्क का विस्तार करने के लिए अपने वर्तमान भागीदारों का लाभ उठाएं।</li>
+                </ul>
+            `,
+            q1_question: "एक कॉर्पोरेट सीएसआर प्रस्ताव में सबसे महत्वपूर्ण तत्व क्या देखता है?",
+            q1_option_a: "एक बहुत लंबी और विस्तृत रिपोर्ट।",
+            q1_option_b: "उनकी अपनी सीएसआर नीति और मूल्यों के साथ रणनीतिक संरेखण।",
+            q1_option_c: "अधिकतम संभव धन के लिए अनुरोध।",
+            q1_option_d: "एक प्रसिद्ध सलाहकार द्वारा लिखा गया एक प्रस्ताव।",
+            q2_question: "एक दाता के साथ दीर्घकालिक संबंध सुनिश्चित करने के लिए, एक गैर-लाभकारी संस्था को:",
+            q2_option_a: "केवल तभी संपर्क करें जब धन की आवश्यकता हो।",
+            q2_option_b: "किसी भी बुरी खबर या चुनौतियों को साझा करने से बचें।",
+            q2_option_c: "पारदर्शी संचार बनाए रखें और साझा लक्ष्यों के प्रति प्रतिबद्धता दिखाएं।",
+            q2_option_d: "केवल ईमेल तक बातचीत सीमित करें।",
+            q3_question: "एक परियोजना के लिए निगरानी और मूल्यांकन (एम एंड ई) रणनीति को आदर्श रूप से कौन परिभाषित करना चाहिए?",
+            q3_option_a: "कॉर्पोरेट दाता को इसे गैर-लाभकारी के लिए बनाना चाहिए।",
+            q3_option_b: "गैर-लाभकारी को सक्रिय रूप से अपनी एम एंड ई रणनीति साझा करनी चाहिए।",
+            q3_option_c: "एक बाहरी तृतीय-पक्ष लेखा परीक्षक।",
+            q3_option_d: "छोटी परियोजनाओं के लिए एम एंड ई आवश्यक नहीं है।",
+            q4_question: "कॉर्पोरेट नेताओं को अपने कारण से भावनात्मक रूप से जोड़ने का एक प्रभावी तरीका क्या है?",
+            q4_option_a: "केवल वित्तीय रिपोर्ट भेजना।",
+            q4_option_b: "स्वयंसेवी अवसरों का आयोजन और सामुदायिक प्रभाव कहानियों को साझा करना।",
+            q4_option_c: "उन्हें एक औपचारिक पर्व रात्रिभोज में आमंत्रित करना।",
+            q4_option_d: "उनके ऑटोग्राफ के लिए पूछना।",
+            q5_question: "इनमें से कौन सा नए कॉर्पोरेट दाताओं की खोज के लिए एक अनुशंसित मंच नहीं है?",
+            q5_option_a: "राष्ट्रीय सीएसआर पोर्टल।",
+            q5_option_b: "लिंक्डइन जैसे व्यावसायिक नेटवर्किंग मंच।",
+            q5_option_c: "यादृच्छिक कंपनी रिसेप्शनिस्टों को कोल्ड कॉलिंग।",
+            q5_option_d: "उद्योग निकाय कार्यक्रम और सम्मेलन।",
+            result_message_prefix: "आपने 5 में से ",
+            result_message_suffix: " अंक प्राप्त किए।",
+        },
+        ta: {
+            title: "CSR எதிர்பார்ப்புகளைப் புரிந்துகொள்வது",
+            guide_intro_title: "CSR நிதி திரட்டலுக்கான ஒரு படி படியான வழிகாட்டி",
+            guide_intro_desc: "இந்த வழிகாட்டி, இலாப நோக்கற்ற நிறுவனங்கள் தங்கள் பெருநிறுவன நன்கொடையாளர்களுடன் வலுவான உறவுகளை வளர்ப்பதற்கு உதவ, தொழில் தலைவர்களிடமிருந்து சிறந்த நடைமுறைகள் மற்றும் உதவிக்குறிப்புகளை வழங்குகிறது. உங்கள் அமைப்பின் CSR ஆயத்த நிலையை மேம்படுத்த படிகள் வழியாக செல்லவும்.",
+            quiz_title: "உங்கள் அறிவை சோதிக்கவும்",
+            quiz_desc: "CSR நிதி திரட்டலுக்கான முக்கிய சிறந்த நடைமுறைகளை நீங்கள் புரிந்து கொண்டீர்களா என்பதைப் பார்க்க இந்த ஐந்து கேள்விகளுக்கு பதிலளிக்கவும்.",
+            submit_button: "பதில்களைச் சமர்ப்பிக்கவும்",
+            footer_text: "இந்தியா பார்ட்னர் நெட்வொர்க் வழங்கிய \"CSR நிதி திரட்டல் குறித்த எதிர்பார்ப்புகளைப் புரிந்துகொள்வது\" அடிப்படையிலான வழிகாட்டி.",
+            step_1_title: "படி 1: பெருநிறுவனங்கள் CSR நன்கொடைகளுக்கு எதைக் கருதுகின்றன?",
+            step_1_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">முக்கிய பரிசீலனைகள்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>மூலோபாய சீரமைப்பு:</strong> முன்மொழிவுகள் பெருநிறுவனத்தின் CSR கொள்கை மற்றும் வணிக மதிப்புகளுடன் ஒத்துப்போக வேண்டும்.</li>
+                    <li><strong>சட்ட இணக்கம்:</strong> CSR சட்டம் மற்றும் தொடர்புடைய சட்டங்களுக்கு இணங்குவது முக்கியம்.</li>
+                    <li><strong>புவியியல் மற்றும் செயல்பாட்டு சூழல்:</strong> செயல்பாடுகள் உள்ளூர் சட்ட கட்டமைப்புகள் மற்றும் கலாச்சார சூழல்களுக்கு பொருந்த வேண்டும்.</li>
+                    <li><strong>கருப்பொருள் பகுதிகள்:</strong> பெருநிறுவனத்தின் வணிகத்துடன் résonance செய்யும் காரணங்களுடன் சீரமைக்கவும்.</li>
+                    <li><strong>தாக்க கண்காணிப்பு:</strong> நன்கொடையாளர்கள் விளைவுகளை கண்காணிக்கவும் புகாரளிக்கவும் வழிமுறைகளை எதிர்பார்க்கிறார்கள்.</li>
+                </ul>
+                <h3 class="font-semibold text-lg brand-blue mt-4 mb-2">பெருநிறுவனங்களுக்கான பொதுவான சவால்கள்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>பல்வேறு நாடுகளில் உள்ள பல்வேறு விதிமுறைகளை வழிநடத்துதல்.</li>
+                    <li>CSR செயல்பாடுகள் பெருநிறுவன உத்தி மற்றும் உள்ளூர் தேவைகள் இரண்டிற்கும் இணக்கமாக இருப்பதை உறுதி செய்தல்.</li>
+                    <li>முயற்சிகளின் உண்மையான தாக்கத்தை அளவிடுதல்.</li>
+                    <li>வணிகம் மற்றும் CSR க்கு இடையே வள ஒதுக்கீட்டை சமநிலைப்படுத்துதல்.</li>
+                    <li>பல்வேறு பங்குதாரர்களின் எதிர்பார்ப்புகளை நிர்வகித்தல்.</li>
+                </ul>
+            `,
+            step_2_title: "படி 2: ஒரு சிறந்த CSR முன்மொழிவு எப்படி இருக்கும்?",
+            step_2_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">முக்கிய கூறுகள்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>தெளிவான கருத்து:</strong> அடையக்கூடிய வெளியீடுகளுடன் நீங்கள் எதை அடைய விரும்புகிறீர்கள் என்பதை தெளிவாகக் கூறவும்.</li>
+                    <li><strong>தெளிவு மற்றும் துல்லியம்:</strong> சுருக்கமாகவும் புள்ளியாகவும் இருங்கள். அத்தியாவசிய விவரங்களுக்கு ஒட்டிக்கொள்க.</li>
+                    <li><strong>விரிவான ஆவணப்படுத்தல்:</strong> திட்ட திட்டங்கள், நிதிகள் மற்றும் இணக்க ஆவணங்களை வழங்கவும்.</li>
+                    <li><strong>M&E உத்தி:</strong> உங்கள் கண்காணிப்பு மற்றும் மதிப்பீட்டு உத்தியை முன்கூட்டியே பகிர்ந்து கொள்ளுங்கள்.</li>
+                    <li><strong>நன்கொடையாளர் நடைமுறைகளுடன் சீரமைப்பு:</strong> முன்மொழிவதற்கு முன் நன்கொடையாளரின் நடைமுறைகள் மற்றும் கொள்கைகளைப் புரிந்து கொள்ளுங்கள்.</li>
+                    <li><strong>ஆர்வம் மற்றும் அர்ப்பணிப்பு:</strong> திட்டத்தின் வெற்றிக்கு உங்கள் அர்ப்பணிப்பு வெளிப்படையாக இருக்க வேண்டும்.</li>
+                    <li><strong>தாக்க கவனம்:</strong> தரவு மற்றும் தெளிவான விளைவுகளால் ஆதரிக்கப்படும் சாத்தியமான தாக்கத்தை வலியுறுத்துங்கள்.</li>
+                </ul>
+            `,
+            step_3_title: "படி 3: நன்கொடையாளர்களுடன் நீண்டகால தொடர்பை எவ்வாறு உறுதி செய்வது?",
+            step_3_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">வலுவான உறவுகளை உருவாக்குதல்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>உற்சாகத்தை வளர்க்கவும்:</strong> உண்மையான ஆர்வத்தைக் காட்டுங்கள் மற்றும் திட்டத்தை அளவிடுவதற்கான திறனை முன்னிலைப்படுத்தவும்.</li>
+                    <li><strong>நெருங்கிய ஒத்துழைப்பு:</strong> ஒரு பகிரப்பட்ட பார்வை மற்றும் பரஸ்பர நம்பிக்கையை உருவாக்க கூட்டாளருடன் நெருக்கமாக பணியாற்றுங்கள்.</li>
+                    <li><strong>வெளிப்படையான தொடர்பு:</strong> முன்னேற்றம், தடைகள் மற்றும் பிரச்சினைகள் குறித்து நேர்மையாக இருங்கள்.</li>
+                    <li><strong>தலைமையை ஈடுபடுத்துங்கள்:</strong> இலாப நோக்கற்ற நிறுவனர்கள் மற்றும் பெருநிறுவன தலைமைக்கு இடையே கூட்டங்களை எளிதாக்குங்கள்.</li>
+                    <li><strong>நீண்டகால இலக்குகளுக்கான அர்ப்பணிப்பு:</strong> பகிரப்பட்ட நோக்கங்களுக்கு அர்ப்பணிப்பைக் காட்டுங்கள் மற்றும் எதிர்கால திட்டங்களைப் பற்றி முன்கூட்டியே இருங்கள்.</li>
+                </ul>
+            `,
+            step_4_title: "படி 4: கூட்டாண்மை மன்றங்கள் எவ்வாறு உதவ முடியும்?",
+            step_4_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">மன்றங்களின் நன்மைகள்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>கூட்டாளர் ஒன்றிணைவு:</strong> பெருநிறுவனம் முன்பு பணியாற்றிய கூட்டாளர்களுடன் இணையுங்கள், நிதிக்கு அப்பாற்பட்ட உறவுகளை விரிவுபடுத்துங்கள்.</li>
+                    <li><strong>நிபுணர்களுடன் நெட்வொர்க்கிங்:</strong> நிபுணர்கள் மற்றும் சக ஊழியர்களிடமிருந்து மதிப்புமிக்க அறிவு மற்றும் புதுமையான யோசனைகளைப் பெறுங்கள்.</li>
+                    <li><strong>ஒத்துழைப்பு மற்றும் பகிர்வு:</strong> சிறந்த நடைமுறைகளைப் பகிர்ந்து கொள்ளுங்கள் மற்றும் ஒரு பெரிய தாக்கத்தை உருவாக்க ஒத்துழைக்கவும்.</li>
+                    <li><strong>சமூக ஈடுபாடு:</strong> சமூக பங்குதாரர்களை அவர்களின் தேவைகள் மற்றும் சவால்களை நேரடியாகப் புரிந்துகொள்ள ஈடுபடுத்துங்கள்.</li>
+                </ul>
+            `,
+            step_5_title: "படி 5: பெருநிறுவன தலைவர்களுடன் ஈடுபாட்டை அதிகரிப்பது எப்படி?",
+            step_5_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">நிச்சயதார்த்த உத்திகள்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>சமூகத்தை ஈடுபடுத்துங்கள்:</strong> சமூக உறுப்பினர்கள் தங்கள் தாக்க அனுபவங்களை நேரடியாக தலைவர்களுடன் பகிர்ந்து கொள்ளட்டும்.</li>
+                    <li><strong>வாரியத்தை ஈடுபடுத்துங்கள்:</strong> வழக்கமான புதுப்பிப்புகள், படங்கள் மற்றும் வீடியோக்களுடன் வாரிய உறுப்பினர்களுக்கு தகவல் தெரிவிக்கவும்.</li>
+                    <li><strong>தன்னார்வ வாய்ப்புகளை எளிதாக்குங்கள்:</strong> காரணத்துடன் அவர்களின் தொடர்பை ஆழப்படுத்த நடைமுறை ஈடுபாட்டை ஊக்குவிக்கவும்.</li>
+                    <li><strong>வழக்கு ஆய்வுகள் மூலம் நுண்ணறிவுகளை வழங்கவும்:</strong> வெற்றி கதைகளை விளக்க நிஜ உலக உதாரணங்களைப் பயன்படுத்தவும்.</li>
+                    <li><strong>ஈர்க்கும் விளக்கக்காட்சிகளை உருவாக்கவும்:</strong> உங்கள் பணியை தொடர்பு கொள்ள தெளிவான, பார்வைக்கு ஈர்க்கும் காட்சிகளைப் பயன்படுத்தவும்.</li>
+                </ul>
+            `,
+            step_6_title: "படி 6: பெருநிறுவன நன்கொடையாளர்களை எங்கே கண்டுபிடிப்பது?",
+            step_6_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">கண்டுபிடிப்பு தளங்கள்:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>தேசிய CSR போர்ட்டல்கள்:</strong> பெருநிறுவன CSR செலவினங்கள் குறித்த தரவைக் கண்டுபிடிக்க அதிகாரப்பூர்வ போர்ட்டல்களைப் பயன்படுத்தவும்.</li>
+                    <li><strong>ஆராய்ச்சி மற்றும் உரிய விடாமுயற்சி:</strong> உங்கள் காரணத்திற்காக ஒரு நல்ல பொருத்தத்தைக் கண்டுபிடிக்க பெருநிறுவனங்களை முழுமையாக ஆராய்ச்சி செய்யுங்கள்.</li>
+                    <li><strong>தொழில்முறை மற்றும் நெட்வொர்க்கிங் மன்றங்கள்:</strong> இந்தியா பார்ட்னர் நெட்வொர்க் (IPN) மற்றும் லிங்க்ட்இன் போன்ற தளங்களில் ஈடுபடுங்கள்.</li>
+                    <li><strong>தொழில் அமைப்புகள் மற்றும் நிகழ்வுகள்:</strong> NASSCOM, CSRBox போன்றவற்றால் நடத்தப்படும் நிகழ்வுகளில் பங்கேற்கவும்.</li>
+                    <li><strong>சமூக ஊடகங்கள்:</strong> தொழில் ரீதியாக அணுக லிங்க்ட்இன் போன்ற தளங்களைப் பயன்படுத்தவும்.</li>
+                    <li><strong>தற்போதுள்ள கூட்டாளர்களுடன் ஒத்துழைப்பு:</strong> உங்கள் நெட்வொர்க்கை விரிவுபடுத்த உங்கள் தற்போதைய கூட்டாளர்களைப் பயன்படுத்துங்கள்.</li>
+                </ul>
+            `,
+            q1_question: "ஒரு பெருநிறுவனம் ஒரு CSR முன்மொழிவில் மிகவும் முக்கியமான உறுப்பு எது?",
+            q1_option_a: "மிக நீண்ட மற்றும் விரிவான அறிக்கை.",
+            q1_option_b: "தங்கள் சொந்த CSR கொள்கை மற்றும் மதிப்புகளுடன் மூலோபாய சீரமைப்பு.",
+            q1_option_c: "சாத்தியமான அதிகபட்ச நிதிக்கான கோரிக்கை.",
+            q1_option_d: "ஒரு பிரபலமான ஆலோசகரால் எழுதப்பட்ட ஒரு முன்மொழிவு.",
+            q2_question: "ஒரு நன்கொடையாளருடன் நீண்டகால உறவை உறுதி செய்ய, ஒரு இலாப நோக்கற்ற நிறுவனம்:",
+            q2_option_a: "நிதி தேவைப்படும்போது மட்டுமே அவர்களைத் தொடர்பு கொள்ளுங்கள்.",
+            q2_option_b: "எந்த கெட்ட செய்தியையும் அல்லது சவால்களையும் பகிர்ந்து கொள்வதைத் தவிர்க்கவும்.",
+            q2_option_c: "வெளிப்படையான தகவல்தொடர்புகளைப் பேணுங்கள் மற்றும் பகிரப்பட்ட குறிக்கோள்களுக்கான அர்ப்பணிப்பைக் காட்டுங்கள்.",
+            q2_option_d: "தொடர்புகளை மின்னஞ்சலுக்கு மட்டும் கட்டுப்படுத்துங்கள்.",
+            q3_question: "ஒரு திட்டத்திற்கான கண்காணிப்பு மற்றும் மதிப்பீட்டு (M&E) உத்தியை யார் आदर्शமாக வரையறுக்க வேண்டும்?",
+            q3_option_a: "பெருநிறுவன நன்கொடையாளர் அதை இலாப நோக்கற்ற நிறுவனத்திற்காக உருவாக்க வேண்டும்.",
+            q3_option_b: "இலாப நோக்கற்ற நிறுவனம் தனது சொந்த M&E உத்தியை முன்கூட்டியே பகிர்ந்து கொள்ள வேண்டும்.",
+            q3_option_c: "ஒரு வெளிப்புற மூன்றாம் தரப்பு தணிக்கையாளர்.",
+            q3_option_d: "சிறிய திட்டங்களுக்கு M&E தேவையில்லை.",
+            q4_question: "பெருநிறுவனத் தலைவர்களை உங்கள் நோக்கத்துடன் உணர்ச்சிப்பூர்வமாக ஈடுபடுத்துவதற்கான ஒரு பயனுள்ள வழி எது?",
+            q4_option_a: "நிதி அறிக்கைகளை மட்டும் அனுப்புதல்.",
+            q4_option_b: "தன்னார்வ வாய்ப்புகளை ஏற்பாடு செய்தல் மற்றும் சமூக தாக்கக் கதைகளைப் பகிர்தல்.",
+            q4_option_c: "அவர்களை ஒரு முறையான கேளிக்கை விருந்துக்கு அழைத்தல்.",
+            q4_option_d: "அவர்களின் கையொப்பத்தைக் கேட்பது.",
+            q5_question: "புதிய பெருநிறுவன நன்கொடையாளர்களைக் கண்டுபிடிப்பதற்கு பரிந்துரைக்கப்படாத தளம் எது?",
+            q5_option_a: "தேசிய CSR போர்ட்டல்கள்.",
+            q5_option_b: "லிங்க்ட்இன் போன்ற தொழில்முறை நெட்வொர்க்கிங் மன்றங்கள்.",
+            q5_option_c: "சீரற்ற நிறுவன வரவேற்பாளர்களை குளிர் அழைப்பு செய்தல்.",
+            q5_option_d: "தொழில் அமைப்பு நிகழ்வுகள் மற்றும் மாநாடுகள்.",
+            result_message_prefix: "நீங்கள் 5க்கு ",
+            result_message_suffix: " மதிப்பெண்கள் பெற்றீர்கள்.",
+        },
+        kn: {
+            title: "CSR ನಿರೀಕ್ಷೆಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುವುದು",
+            guide_intro_title: "CSR ನಿಧಿ ಸಂಗ್ರಹಣೆಗಾಗಿ ಹಂತ-ಹಂತದ ಮಾರ್ಗದರ್ಶಿ",
+            guide_intro_desc: "ಈ ಮಾರ್ಗದರ್ಶಿಯು ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥೆಗಳಿಗೆ ತಮ್ಮ ಕಾರ್ಪೊರೇಟ್ ದಾನಿಗಳೊಂದಿಗೆ ಬಲವಾದ ಸಂಬಂಧಗಳನ್ನು ಬೆಳೆಸಲು ಸಹಾಯ ಮಾಡಲು ಉದ್ಯಮದ ನಾಯಕರಿಂದ ಉತ್ತಮ ಅಭ್ಯಾಸಗಳು ಮತ್ತು ಸಲಹೆಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ. ನಿಮ್ಮ ಸಂಸ್ಥೆಯ CSR ಸಿದ್ಧತೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ಹಂತಗಳ ಮೂಲಕ ನ್ಯಾವಿಗೇಟ್ ಮಾಡಿ.",
+            quiz_title: "ನಿಮ್ಮ ಜ್ಞಾನವನ್ನು ಪರೀಕ್ಷಿಸಿ",
+            quiz_desc: "CSR ನಿಧಿ ಸಂಗ್ರಹಣೆಗಾಗಿ ಪ್ರಮುಖ ಉತ್ತಮ ಅಭ್ಯಾಸಗಳನ್ನು ನೀವು ಅರ್ಥಮಾಡಿಕೊಂಡಿದ್ದೀರಾ ಎಂದು ನೋಡಲು ಈ ಐದು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.",
+            submit_button: "ಉತ್ತರಗಳನ್ನು ಸಲ್ಲಿಸಿ",
+            footer_text: "ಇಂಡಿಯಾ ಪಾರ್ಟ್ನರ್ ನೆಟ್‌ವರ್ಕ್‌ನಿಂದ \"CSR ನಿಧಿ ಸಂಗ್ರಹಣೆಯ ಮೇಲಿನ ನಿರೀಕ್ಷೆಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುವುದು\" ಆಧರಿಸಿದ ಮಾರ್ಗದರ್ಶಿ.",
+            step_1_title: "ಹಂತ 1: ಕಾರ್ಪೊರೇಟ್‌ಗಳು CSR ದೇಣಿಗೆಗಳಿಗಾಗಿ ಏನನ್ನು ಪರಿಗಣಿಸುತ್ತವೆ?",
+            step_1_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">ಪ್ರಮುಖ ಪರಿಗಣನೆಗಳು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>ಕಾರ್ಯತಂತ್ರದ ಹೊಂದಾಣಿಕೆ:</strong> ಪ್ರಸ್ತಾವನೆಗಳು ಕಾರ್ಪೊರೇಟ್‌ನ CSR ನೀತಿ ಮತ್ತು ವ್ಯವಹಾರ ಮೌಲ್ಯಗಳೊಂದಿಗೆ ಹೊಂದಿಕೆಯಾಗಬೇಕು.</li>
+                    <li><strong>ಕಾನೂನು ಅನುಸರಣೆ:</strong> CSR ಕಾಯಿದೆ ಮತ್ತು ಸಂಬಂಧಿತ ಕಾನೂನುಗಳಿಗೆ ಬದ್ಧವಾಗಿರುವುದು ನಿರ್ಣಾಯಕವಾಗಿದೆ.</li>
+                    <li><strong>ಭೌಗೋಳಿಕ ಮತ್ತು ಕಾರ್ಯಾಚರಣೆಯ ಸಂದರ್ಭ:</strong> ಚಟುವಟಿಕೆಗಳು ಸ್ಥಳೀಯ ಕಾನೂನು ಚೌಕಟ್ಟುಗಳು ಮತ್ತು ಸಾಂಸ್ಕೃತಿಕ ಸಂದರ್ಭಗಳಿಗೆ ಸರಿಹೊಂದಬೇಕು.</li>
+                    <li><strong>ವಿಷಯಾಧಾರಿತ ಪ್ರದೇಶಗಳು:</strong> ಕಾರ್ಪೊರೇಟ್‌ನ ವ್ಯವಹಾರದೊಂದಿಗೆ ಅನುರಣಿಸುವ ಕಾರಣಗಳೊಂದಿಗೆ ಹೊಂದಾಣಿಕೆ ಮಾಡಿ.</li>
+                    <li><strong>ಪರಿಣಾಮ ಟ್ರ್ಯಾಕಿಂಗ್:</strong> ದಾನಿಗಳು ಫಲಿತಾಂಶಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಲು ಮತ್ತು ವರದಿ ಮಾಡಲು ಕಾರ್ಯವಿಧಾನಗಳನ್ನು ನಿರೀಕ್ಷಿಸುತ್ತಾರೆ.</li>
+                </ul>
+                <h3 class="font-semibold text-lg brand-blue mt-4 mb-2">ಕಾರ್ಪೊರೇಟ್‌ಗಳಿಗೆ ಸಾಮಾನ್ಯ ಸವಾಲುಗಳು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>ವಿವಿಧ ದೇಶಗಳಲ್ಲಿ ವೈವಿಧ್ಯಮಯ ನಿಯಮಗಳನ್ನು ನ್ಯಾವಿಗೇಟ್ ಮಾಡುವುದು.</li>
+                    <li>CSR ಚಟುವಟಿಕೆಗಳು ಕಾರ್ಪೊರೇಟ್ ಕಾರ್ಯತಂತ್ರ ಮತ್ತು ಸ್ಥಳೀಯ ಅಗತ್ಯತೆಗಳೆರಡಕ್ಕೂ ಹೊಂದಿಕೆಯಾಗುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳುವುದು.</li>
+                    <li>ಉಪಕ್ರಮಗಳ ನೈಜ ಪರಿಣಾಮವನ್ನು ಅಳೆಯುವುದು.</li>
+                    <li>ವ್ಯವಹಾರ ಮತ್ತು CSR ನಡುವೆ ಸಂಪನ್ಮೂಲ ಹಂಚಿಕೆಯನ್ನು ಸಮತೋಲನಗೊಳಿಸುವುದು.</li>
+                    <li>ವಿವಿಧ ಮಧ್ಯಸ್ಥಗಾರರ ನಿರೀಕ್ಷೆಗಳನ್ನು ನಿರ್ವಹಿಸುವುದು.</li>
+                </ul>
+            `,
+            step_2_title: "ಹಂತ 2: ಆದರ್ಶ CSR ಪ್ರಸ್ತಾವನೆಯು ಹೇಗಿರುತ್ತದೆ?",
+            step_2_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">ಪ್ರಮುಖ ಘಟಕಗಳು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>ಸ್ಪಷ್ಟ ಪರಿಕಲ್ಪನೆ:</strong> ಸಾಧಿಸಬಹುದಾದ ಉತ್ಪನ್ನಗಳೊಂದಿಗೆ ನೀವು ಏನನ್ನು ಸಾಧಿಸಲು ಬಯಸುತ್ತೀರಿ ಎಂಬುದನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಹೇಳಿ.</li>
+                    <li><strong>ಸ್ಪಷ್ಟತೆ ಮತ್ತು ನಿಖರತೆ:</strong> ಸಂಕ್ಷಿಪ್ತವಾಗಿ ಮತ್ತು ಬಿಂದುವಿಗೆ ಇರಿ. ಅಗತ್ಯ ವಿವರಗಳಿಗೆ ಅಂಟಿಕೊಳ್ಳಿ.</li>
+                    <li><strong>ವಿವರವಾದ ದಸ್ತಾವೇಜನ್ನು:</strong> ಯೋಜನಾ ಯೋಜನೆಗಳು, ಹಣಕಾಸು ಮತ್ತು ಅನುಸರಣೆ ದಾಖಲೆಗಳನ್ನು ಒದಗಿಸಿ.</li>
+                    <li><strong>M&E ತಂತ್ರ:</strong> ನಿಮ್ಮ ಮಾನಿಟರಿಂಗ್ ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ತಂತ್ರವನ್ನು ಪೂರ್ವಭಾವಿಯಾಗಿ ಹಂಚಿಕೊಳ್ಳಿ.</li>
+                    <li><strong>ದಾನಿಗಳ ಅಭ್ಯಾಸಗಳೊಂದಿಗೆ ಹೊಂದಾಣಿಕೆ:</strong> ಪ್ರಸ್ತಾಪಿಸುವ ಮೊದಲು ದಾನಿಗಳ ಅಭ್ಯಾಸಗಳು ಮತ್ತು ನೀತಿಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ.</li>
+                    <li><strong>ვნೋದ ಮತ್ತು ಬದ್ಧತೆ:</strong> ಯೋಜನೆಯ ಯಶಸ್ಸಿಗೆ ನಿಮ್ಮ ಸಮರ್ಪಣೆ ಸ್ಪಷ್ಟವಾಗಿರಬೇಕು.</li>
+                    <li><strong>ಪರಿಣಾಮದ ಗಮನ:</strong> ಡೇಟಾ ಮತ್ತು ಸ್ಪಷ್ಟ ಫಲಿತಾಂಶಗಳಿಂದ ಬೆಂಬಲಿತವಾದ ಸಂಭಾವ್ಯ ಪರಿಣಾಮವನ್ನು ಒತ್ತಿಹೇಳಿರಿ.</li>
+                </ul>
+            `,
+            step_3_title: "ಹಂತ 3: ದಾನಿಗಳೊಂದಿಗೆ ದೀರ್ಘಾವಧಿಯ ಸಹಭಾಗಿತ್ವವನ್ನು ಹೇಗೆ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳುವುದು?",
+            step_3_content: `
+                 <h3 class="font-semibold text-lg brand-blue mb-2">ಬಲವಾದ ಸಂಬಂಧಗಳನ್ನು ನಿರ್ಮಿಸುವುದು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>ಉತ್ಸಾಹವನ್ನು ಬೆಳೆಸಿಕೊಳ್ಳಿ:</strong> ನಿಜವಾದ ಉತ್ಸಾಹವನ್ನು ತೋರಿಸಿ ಮತ್ತು ಯೋಜನೆಯನ್ನು ಅಳೆಯುವ ಸಾಮರ್ಥ್ಯವನ್ನು ಹೈಲೈಟ್ ಮಾಡಿ.</li>
+                    <li><strong>ನಿಕಟ ಸಹಯೋಗ:</strong> ಹಂಚಿದ ದೃಷ್ಟಿ ಮತ್ತು ಪರಸ್ಪರ ನಂಬಿಕೆಯನ್ನು ನಿರ್ಮಿಸಲು ಪಾಲುದಾರರೊಂದಿಗೆ ನಿಕಟವಾಗಿ ಕೆಲಸ ಮಾಡಿ.</li>
+                    <li><strong>ಪಾರದರ್ಶಕ ಸಂವಹನ:</strong> ಪ್ರಗತಿ, ಅಡೆತಡೆಗಳು ಮತ್ತು ಸಮಸ್ಯೆಗಳ ಬಗ್ಗೆ ಪ್ರಾಮಾಣಿಕವಾಗಿರಿ.</li>
+                    <li><strong>ನಾಯಕತ್ವವನ್ನು ತೊಡಗಿಸಿಕೊಳ್ಳಿ:</strong> ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥಾಪಕರು ಮತ್ತು ಕಾರ್ಪೊರೇಟ್ ನಾಯಕತ್ವದ ನಡುವೆ ಸಭೆಗಳನ್ನು ಸುಗಮಗೊಳಿಸಿ.</li>
+                    <li><strong>ದೀರ್ಘಾವಧಿಯ ಗುರಿಗಳಿಗೆ ಬದ್ಧತೆ:</strong> ಹಂಚಿದ ಉದ್ದೇಶಗಳಿಗೆ ಬದ್ಧತೆಯನ್ನು ತೋರಿಸಿ ಮತ್ತು ಭವಿಷ್ಯದ ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಪೂರ್ವಭಾವಿಯಾಗಿರಿ.</li>
+                </ul>
+            `,
+            step_4_title: "ಹಂತ 4: ಪಾಲುದಾರಿಕೆ ವೇದಿಕೆಗಳು ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?",
+            step_4_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">ವೇದಿಕೆಗಳ ಪ್ರಯೋಜನಗಳು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>ಪಾಲುದಾರರ ಒಮ್ಮುಖ:</strong> ಕಾರ್ಪೊರೇಟ್ ಈ ಹಿಂದೆ ಕೆಲಸ ಮಾಡಿದ ಪಾಲುದಾರರೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಿ, ನಿಧಿಗಿಂತ ಹೆಚ್ಚಿನ ಸಂಬಂಧಗಳನ್ನು ವಿಸ್ತರಿಸಿ.</li>
+                    <li><strong>ತಜ್ಞರೊಂದಿಗೆ ನೆಟ್‌ವರ್ಕಿಂಗ್:</strong> ತಜ್ಞರು ಮತ್ತು ಗೆಳೆಯರಿಂದ ಅಮೂಲ್ಯವಾದ ಜ್ಞಾನ ಮತ್ತು ನವೀನ ಆಲೋಚನೆಗಳನ್ನು ಪಡೆದುಕೊಳ್ಳಿ.</li>
+                    <li><strong>ಸಹಯೋಗ ಮತ್ತು ಹಂಚಿಕೆ:</strong> ಉತ್ತಮ ಅಭ್ಯಾಸಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳಿ ಮತ್ತು ದೊಡ್ಡ ಪರಿಣಾಮವನ್ನು ಬೀರಲು ಸಹಕರಿಸಿ.</li>
+                    <li><strong>ಸಮುದಾಯದ ನಿಶ್ಚಿತಾರ್ಥ:</strong> ಸಮುದಾಯದ ಮಧ್ಯಸ್ಥಗಾರರನ್ನು ಅವರ ಅಗತ್ಯತೆಗಳು ಮತ್ತು ಸವಾಲುಗಳನ್ನು ನೇರವಾಗಿ ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ತೊಡಗಿಸಿಕೊಳ್ಳಿ.</li>
+                </ul>
+            `,
+            step_5_title: "ಹಂತ 5: ಕಾರ್ಪೊರೇಟ್ ನಾಯಕರೊಂದಿಗೆ ನಿಶ್ಚಿತಾರ್ಥವನ್ನು ಹೇಗೆ ಹೆಚ್ಚಿಸುವುದು?",
+            step_5_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">ನಿಶ್ಚಿತಾರ್ಥದ ತಂತ್ರಗಳು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>ಸಮುದಾಯವನ್ನು ತೊಡಗಿಸಿಕೊಳ್ಳಿ:</strong> ಸಮುದಾಯದ ಸದಸ್ಯರು ತಮ್ಮ ಪರಿಣಾಮದ ಅನುಭವಗಳನ್ನು ನೇರವಾಗಿ ನಾಯಕರೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಲಿ.</li>
+                    <li><strong>ಮಂಡಳಿಯನ್ನು ತೊಡಗಿಸಿಕೊಳ್ಳಿ:</strong> ಮಂಡಳಿಯ ಸದಸ್ಯರಿಗೆ ನಿಯಮಿತ ನವೀಕರಣಗಳು, ಚಿತ್ರಗಳು ಮತ್ತು ವೀಡಿಯೊಗಳೊಂದಿಗೆ ಮಾಹಿತಿ ನೀಡಿ.</li>
+                    <li><strong>ಸ್ವಯಂಸೇವಕ ಅವಕಾಶಗಳನ್ನು ಸುಗಮಗೊಳಿಸಿ:</strong> ಕಾರಣದೊಂದಿಗೆ ಅವರ ಸಂಪರ್ಕವನ್ನು ಗಾಢವಾಗಿಸಲು ಕೈಜೋಡಿಸುವಿಕೆಯನ್ನು ಪ್ರೋತ್ಸಾಹಿಸಿ.</li>
+                    <li><strong>ಕೇಸ್ ಸ್ಟಡೀಸ್ ಮೂಲಕ ಒಳನೋಟಗಳನ್ನು ಒದಗಿಸಿ:</strong> ಯಶಸ್ಸಿನ ಕಥೆಗಳನ್ನು ವಿವರಿಸಲು ನೈಜ-ಪ್ರಪಂಚದ ಉದಾಹರಣೆಗಳನ್ನು ಬಳಸಿ.</li>
+                    <li><strong>ಆಕರ್ಷಕ ಪ್ರಸ್ತುತಿಗಳನ್ನು ರಚಿಸಿ:</strong> ನಿಮ್ಮ ಧ್ಯೇಯವನ್ನು ಸಂವಹನ ಮಾಡಲು ಸ್ಪಷ್ಟ, ದೃಷ್ಟಿಗೆ ಆಕರ್ಷಕವಾದ ದೃಶ್ಯಗಳನ್ನು ಬಳಸಿ.</li>
+                </ul>
+            `,
+            step_6_title: "ಹಂತ 6: ಕಾರ್ಪೊರೇಟ್ ದಾನಿಗಳನ್ನು ಎಲ್ಲಿ ಕಂಡುಹಿಡಿಯುವುದು?",
+            step_6_content: `
+                <h3 class="font-semibold text-lg brand-blue mb-2">ಶೋಧನಾ ವೇದಿಕೆಗಳು:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>ರಾಷ್ಟ್ರೀಯ CSR ಪೋರ್ಟಲ್‌ಗಳು:</strong> ಕಾರ್ಪೊರೇಟ್ CSR ಖರ್ಚುಗಳ ಕುರಿತು ಡೇಟಾವನ್ನು ಹುಡುಕಲು ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗಳನ್ನು ಬಳಸಿ.</li>
+                    <li><strong>ಸಂಶೋಧನೆ ಮತ್ತು ಯೋಗ್ಯ ಪರಿಶ್ರಮ:</strong> ನಿಮ್ಮ ಕಾರಣಕ್ಕೆ ಉತ್ತಮ ಹೊಂದಾಣಿಕೆಯನ್ನು ಕಂಡುಹಿಡಿಯಲು ಕಾರ್ಪೊರೇಟ್‌ಗಳನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಸಂಶೋಧಿಸಿ.</li>
+                    <li><strong>ವೃತ್ತಿಪರ ಮತ್ತು ನೆಟ್‌ವರ್ಕಿಂಗ್ ವೇದಿಕೆಗಳು:</strong> ಇಂಡಿಯಾ ಪಾರ್ಟ್ನರ್ ನೆಟ್‌ವರ್ಕ್ (IPN) ಮತ್ತು ಲಿಂಕ್ಡ್‌ಇನ್‌ನಂತಹ ವೇದಿಕೆಗಳಲ್ಲಿ ತೊಡಗಿಸಿಕೊಳ್ಳಿ.</li>
+                    <li><strong>ಉದ್ಯಮ ಸಂಸ್ಥೆಗಳು ಮತ್ತು ಕಾರ್ಯಕ್ರಮಗಳು:</strong> NASSCOM, CSRBox, ಇತ್ಯಾದಿಗಳಿಂದ ಆಯೋಜಿಸಲಾದ ಕಾರ್ಯಕ್ರಮಗಳಲ್ಲಿ ಭಾಗವಹಿಸಿ.</li>
+                    <li><strong>ಸಾಮಾಜಿಕ ಮಾಧ್ಯಮ:</strong> ವೃತ್ತಿಪರವಾಗಿ ತಲುಪಲು ಲಿಂಕ್ಡ್‌ಇನ್‌ನಂತಹ ವೇದಿಕೆಗಳನ್ನು ಬಳಸಿ.</li>
+                    <li><strong>ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಪಾಲುದಾರರೊಂದಿಗೆ ಸಹಯೋಗ:</strong> ನಿಮ್ಮ ನೆಟ್‌ವರ್ಕ್ ಅನ್ನು ವಿಸ್ತರಿಸಲು ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಪಾಲುದಾರರನ್ನು ಬಳಸಿಕೊಳ್ಳಿ.</li>
+                </ul>
+            `,
+             q1_question: "ಒಂದು ಕಾರ್ಪೊರೇಟ್ CSR ಪ್ರಸ್ತಾವನೆಯಲ್ಲಿ ಅತಿ ಮುಖ್ಯವಾದ ಅಂಶ ಯಾವುದು?",
+             q1_option_a: "ಬಹಳ ದೀರ್ಘ ಮತ್ತು ವಿವರವಾದ ವರದಿ.",
+             q1_option_b: "ತಮ್ಮದೇ ಆದ CSR ನೀತಿ ಮತ್ತು ಮೌಲ್ಯಗಳೊಂದಿಗೆ ಕಾರ್ಯತಂತ್ರದ ಹೊಂದಾಣಿಕೆ.",
+             q1_option_c: "ಗರಿಷ್ಠ ಸಂಭವನೀಯ ನಿಧಿಗಾಗಿ ವಿನಂತಿ.",
+             q1_option_d: "ಒಬ್ಬ ಪ್ರಸಿದ್ಧ ಸಲಹೆಗಾರರಿಂದ ಬರೆಯಲ್ಪಟ್ಟ ಪ್ರಸ್ತಾವನೆ.",
+             q2_question: "ಒಬ್ಬ ದಾನಿಯೊಂದಿಗೆ ದೀರ್ಘಕಾಲೀನ ಸಂಬಂಧವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು, ಒಂದು ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥೆಯು:",
+             q2_option_a: "ನಿಧಿಯ ಅವಶ್ಯಕತೆ ಇದ್ದಾಗ ಮಾತ್ರ ಅವರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+             q2_option_b: "ಯಾವುದೇ ಕೆಟ್ಟ ಸುದ್ದಿ ಅಥವಾ ಸವಾಲುಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳುವುದನ್ನು ತಪ್ಪಿಸಿ.",
+             q2_option_c: "ಪಾರದರ್ಶಕ ಸಂವಹನವನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಿ ಮತ್ತು ಹಂಚಿದ ಗುರಿಗಳಿಗೆ ಬದ್ಧತೆಯನ್ನು ತೋರಿಸಿ.",
+             q2_option_d: "ಸಂವಹನವನ್ನು ಇಮೇಲ್‌ಗೆ ಮಾತ್ರ ಸೀಮಿತಗೊಳಿಸಿ.",
+             q3_question: "ಒಂದು ಯೋಜನೆಗಾಗಿ ಮಾನಿಟರಿಂಗ್ & ಮೌಲ್ಯಮಾಪನ (M&E) ತಂತ್ರವನ್ನು ಯಾರು ಆದರ್ಶಪ್ರಾಯವಾಗಿ ವ್ಯಾಖ್ಯಾನಿಸಬೇಕು?",
+             q3_option_a: "ಕಾರ್ಪೊರೇಟ್ ದಾನಿಯು ಅದನ್ನು ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥೆಗಾಗಿ ರಚಿಸಬೇಕು.",
+             q3_option_b: "ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥೆಯು ತನ್ನದೇ ಆದ M&E ತಂತ್ರವನ್ನು ಪೂರ್ವಭಾವಿಯಾಗಿ ಹಂಚಿಕೊಳ್ಳಬೇಕು.",
+             q3_option_c: "ಒಬ್ಬ ಬಾಹ್ಯ ತೃತೀಯ ಲೆಕ್ಕಪರಿಶೋಧಕ.",
+             q3_option_d: "ಸಣ್ಣ ಯೋಜನೆಗಳಿಗೆ M&E ಅಗತ್ಯವಿಲ್ಲ.",
+             q4_question: "ಕಾರ್ಪೊರೇಟ್ ನಾಯಕರನ್ನು ನಿಮ್ಮ ಕಾರಣದೊಂದಿಗೆ ಭಾವನಾತ್ಮಕವಾಗಿ ತೊಡಗಿಸಿಕೊಳ್ಳಲು ಪರಿಣಾಮಕಾರಿ ಮಾರ್ಗ ಯಾವುದು?",
+             q4_option_a: "ಕೇವಲ ಹಣಕಾಸು ವರದಿಗಳನ್ನು ಕಳುಹಿಸುವುದು.",
+             q4_option_b: "ಸ್ವಯಂಸೇವಕ ಅವಕಾಶಗಳನ್ನು ಆಯೋಜಿಸುವುದು ಮತ್ತು ಸಮುದಾಯದ ಪ್ರಭಾವದ ಕಥೆಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳುವುದು.",
+             q4_option_c: "ಅವರನ್ನು ಔಪಚಾರಿಕ ಗಾಲಾ ಡಿನ್ನರ್‌ಗೆ ಆಹ್ವಾನಿಸುವುದು.",
+             q4_option_d: "ಅವರ ಆಟೋಗ್ರಾಫ್‌ಗಾಗಿ ಕೇಳುವುದು.",
+             q5_question: "ಹೊಸ ಕಾರ್ಪೊರೇಟ್ ದಾನಿಗಳನ್ನು ಕಂಡುಹಿಡಿಯಲು ಶಿಫಾರಸು ಮಾಡದ ವೇದಿಕೆ ಯಾವುದು?",
+             q5_option_a: "ರಾಷ್ಟ್ರೀಯ CSR ಪೋರ್ಟಲ್‌ಗಳು.",
+             q5_option_b: "ಲಿಂಕ್ಡ್‌ಇನ್‌ನಂತಹ ವೃತ್ತಿಪರ ನೆಟ್‌ವರ್ಕಿಂಗ್ ವೇದಿಕೆಗಳು.",
+             q5_option_c: "ಯಾದೃಚ್ಛಿಕ ಕಂಪನಿ ಸ್ವಾಗತಕಾರರಿಗೆ ಕೋಲ್ಡ್ ಕಾಲಿಂಗ್ ಮಾಡುವುದು.",
+             q5_option_d: "ಉದ್ಯಮ ಸಂಸ್ಥೆಯ ಕಾರ್ಯಕ್ರಮಗಳು ಮತ್ತು ಸಮ್ಮೇಳನಗಳು.",
+             result_message_prefix: "ನೀವು 5 ರಲ್ಲಿ ",
+             result_message_suffix: " ಅಂಕಗಳನ್ನು ಗಳಿಸಿದ್ದೀರಿ.",
+        },
+    };
+
+    // --- GUIDE & QUIZ DATA ---
+    const guideSteps = [
+        { id: 1, titleKey: "step_1_title", contentKey: "step_1_content" },
+        { id: 2, titleKey: "step_2_title", contentKey: "step_2_content" },
+        { id: 3, titleKey: "step_3_title", contentKey: "step_3_content" },
+        { id: 4, titleKey: "step_4_title", contentKey: "step_4_content" },
+        { id: 5, titleKey: "step_5_title", contentKey: "step_5_content" },
+        { id: 6, titleKey: "step_6_title", contentKey: "step_6_content" },
+    ];
+
+    const quizData = [
+        {
+            questionKey: "q1_question",
+            options: [
+                { key: "q1_option_a" },
+                { key: "q1_option_b" },
+                { key: "q1_option_c" },
+                { key: "q1_option_d" },
+            ],
+            correctAnswer: "q1_option_b",
+        },
+        {
+            questionKey: "q2_question",
+            options: [
+                { key: "q2_option_a" },
+                { key: "q2_option_b" },
+                { key: "q2_option_c" },
+                { key: "q2_option_d" },
+            ],
+            correctAnswer: "q2_option_c",
+        },
+        {
+            questionKey: "q3_question",
+            options: [
+                { key: "q3_option_a" },
+                { key: "q3_option_b" },
+                { key: "q3_option_c" },
+                { key: "q3_option_d" },
+            ],
+            correctAnswer: "q3_option_b",
+        },
+        {
+            questionKey: "q4_question",
+            options: [
+                { key: "q4_option_a" },
+                { key: "q4_option_b" },
+                { key: "q4_option_c" },
+                { key: "q4_option_d" },
+            ],
+            correctAnswer: "q4_option_b",
+        },
+        {
+            questionKey: "q5_question",
+            options: [
+                { key: "q5_option_a" },
+                { key: "q5_option_b" },
+                { key: "q5_option_c" },
+                { key: "q5_option_d" },
+            ],
+            correctAnswer: "q5_option_c",
+        },
+    ];
+
+    // --- APPLICATION LOGIC ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const accordionContainer = document.getElementById('accordionContainer');
+        const quizContainer = document.getElementById('quizContainer');
+
+        function createGuide() {
+            accordionContainer.innerHTML = ''; // Clear previous content
+            guideSteps.forEach(step => {
+                const stepDiv = document.createElement('div');
+                stepDiv.innerHTML = `
+                    <button class="accordion-button flex justify-between items-center w-full text-left p-4 rounded-lg shadow hover:bg-gray-100 focus:outline-none">
+                        <span class="font-semibold text-lg brand-blue" data-key="${step.titleKey}"></span>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="prose max-w-none" data-key="${step.contentKey}"></div>
+                    </div>
+                `;
+                accordionContainer.appendChild(stepDiv);
+            });
+        }
+        
+        function createQuiz() {
+            quizContainer.innerHTML = ''; // Clear previous content
+            quizData.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.id = `question-${index}`;
+                questionDiv.innerHTML = `
+                    <p class="font-semibold mb-3 text-gray-800" data-key="${q.questionKey}"></p>
+                    <div class="space-y-2 options-container">
+                        ${q.options.map((opt, optIndex) => `
+                            <label class="quiz-option block w-full text-left p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100">
+                                <input type="radio" name="question${index}" value="${opt.key}" class="hidden">
+                                <span data-key="${opt.key}"></span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+            addQuizEventListeners();
+        }
+
+        function addQuizEventListeners() {
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    // Find the parent options container
+                    const container = option.closest('.options-container');
+                    // Remove 'selected' from all siblings
+                    container.querySelectorAll('.quiz-option').forEach(sibling => {
+                        sibling.classList.remove('selected');
+                    });
+                    // Add 'selected' to the clicked option
+                    option.classList.add('selected');
+                });
+            });
+
+             document.getElementById('submitQuizBtn').addEventListener('click', handleSubmitQuiz);
+        }
+
+        function handleSubmitQuiz() {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                const container = document.getElementById(`question-${index}`);
+                const selectedOption = container.querySelector(`input[name="question${index}"]:checked`);
+                const optionsLabels = container.querySelectorAll('.quiz-option');
+
+                optionsLabels.forEach(label => {
+                    const input = label.querySelector('input');
+                    label.classList.remove('selected'); // clean up selection style
+                    if (input.value === q.correctAnswer) {
+                        label.classList.add('correct-answer');
+                    }
+                });
+
+                if (selectedOption) {
+                    const selectedLabel = selectedOption.parentElement;
+                    if (selectedOption.value === q.correctAnswer) {
+                        score++;
+                    } else {
+                        selectedLabel.classList.add('wrong-answer');
+                    }
+                }
+            });
+            const resultElement = document.getElementById('quizResult');
+            const lang = document.getElementById('languageSelector').value;
+            resultElement.innerHTML = `${translations[lang].result_message_prefix} ${score} ${translations[lang].result_message_suffix}`;
+            resultElement.classList.remove('hidden');
+            document.getElementById('submitQuizBtn').disabled = true;
+            document.getElementById('submitQuizBtn').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+
+        // Accordion functionality
+        accordionContainer.addEventListener('click', (event) => {
+            const button = event.target.closest('.accordion-button');
+            if (!button) return;
+
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('svg');
+
+            button.classList.toggle('open');
+            icon.classList.toggle('rotate-180');
+
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+
+        // Initial setup
+        createGuide();
+        createQuiz();
+        changeLanguage(); // Set initial language
+    });
+
+    // --- TRANSLATION FUNCTIONALITY ---
+    function changeLanguage() {
+        const lang = document.getElementById('languageSelector').value;
+        const allTextElements = document.querySelectorAll('[data-key]');
+        
+        allTextElements.forEach(element => {
+            const key = element.getAttribute('data-key');
+            if (translations[lang] && translations[lang][key]) {
+                element.innerHTML = translations[lang][key];
+            }
+        });
+        
+        // Reset quiz if language is changed after submission
+        const resultElement = document.getElementById('quizResult');
+        resultElement.innerHTML = '';
+        const submitButton = document.getElementById('submitQuizBtn');
+        submitButton.disabled = false;
+        submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        document.querySelectorAll('.quiz-option').forEach(opt => {
+             opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+             const input = opt.querySelector('input');
+             if(input) input.checked = false;
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
