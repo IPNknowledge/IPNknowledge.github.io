@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowdfunding Platforms in India</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card-body {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900" data-key="title"></h1>
+                <div class="flex items-center space-x-4">
+                    <label for="language-select" class="text-sm font-medium sr-only" data-key="select_language_label">Language:</label>
+                    <select id="language-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md shadow-sm">
+                        <option value="en" selected>English</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div class="text-center mb-8 md:mb-12">
+            <p class="mt-1 text-lg text-gray-600 max-w-3xl mx-auto" data-key="subtitle"></p>
+        </div>
+
+        <!-- Platforms Grid -->
+        <div id="platforms-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Platform cards will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-12">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+            <p class="text-sm" data-key="footer_text"></p>
+        </div>
+    </footer>
+
+    <script type="module">
+        // Data strictly from the provided CSV file
+        const platformsData = [
+            { id: 1, name: "Milaap", website: "https://milaap.org/", types: ["Donation"], subscriptionFee: "Free", platformFee: "0% for India, 5% for international" },
+            { id: 2, name: "Ketto", website: "https://www.ketto.org/", types: ["Donation", "Social"], subscriptionFee: "Free", platformFee: "Varies (0% for some)" },
+            { id: 3, name: "ImpactGuru", website: "https://www.impactguru.com/", types: ["Donation", "Medical"], subscriptionFee: "Free", platformFee: "Varies" },
+            { id: 4, name: "GiveIndia", website: "https://www.giveindia.org/", types: ["Donation", "Social"], subscriptionFee: "N/A", platformFee: "Varies" },
+            { id: 5, name: "FuelADream", website: "https://www.fueladream.com/", types: ["Reward", "Donation"], subscriptionFee: "On-request", platformFee: "9%" },
+            { id: 6, name: "Wishberry", website: "https://www.wishberry.in/", types: ["Reward", "Creative"], subscriptionFee: "₹2,499", platformFee: "10% (if goal met)" },
+            { id: 7, name: "Catapooolt", website: "https://www.catapooolt.com/", types: ["Reward", "Equity"], subscriptionFee: "Contact for info", platformFee: "Varies" },
+            { id: 8, name: "Our Democracy", website: "https://www.ourdemocracy.in/", types: ["Donation", "Political"], subscriptionFee: "Free", platformFee: "5%" },
+            { id: 9, name: "LetsVenture", website: "https://letsventure.com/", types: ["Equity", "Startup"], subscriptionFee: "For Investors", platformFee: "Varies" },
+            { id: 10, name: "Tyke", website: "https://tykeinvest.com/", types: ["Equity", "Community"], subscriptionFee: "N/A", platformFee: "Varies" },
+            { id: 11, name: "DonateKart", website: "https://www.donatekart.com/", types: ["Donation", "In-kind"], subscriptionFee: "Free", platformFee: "Varies with logistics" },
+            { id: 12, name: "Rang De", website: "https://rangde.in/", types: ["Lending", "Social"], subscriptionFee: "For Investors", platformFee: "3%" },
+            { id: 13, name: "CrowdKash", website: "https://www.crowdkash.com/", types: ["Donation", "Creative"], subscriptionFee: "Free", platformFee: "5-10%" },
+            { id: 14, name: "The Hot Start", website: "https://www.thehotstart.com/", types: ["Reward", "Startup"], subscriptionFee: "Contact for info", platformFee: "Varies" },
+            { id: 15, name: "Faircent", website: "https://www.faircent.com/", types: ["Lending"], subscriptionFee: "For Lenders/Borrowers", platformFee: "Varies" },
+            { id: 16, name: "i2iFunding", website: "https://www.i2ifunding.com/", types: ["Lending"], subscriptionFee: "For Lenders/Borrowers", platformFee: "Varies" },
+            { id: 17, name: "Kiva", website: "https://www.kiva.org/", types: ["Lending", "Social"], subscriptionFee: "N/A", platformFee: "Optional tip" },
+            { id: 18, name: "GoFundMe", website: "https://www.gofundme.com/", types: ["Donation", "Personal"], subscriptionFee: "Free", platformFee: "0% (platform fee)" },
+            { id: 19, name: "LenDenClub", website: "https://www.lendenclub.com/", types: ["Lending"], subscriptionFee: "For Lenders/Borrowers", platformFee: "Varies" },
+            { id: 20, name: "Indiegogo", website: "https://www.indiegogo.com/", types: ["Reward", "Donation", "Startup"], subscriptionFee: "N/A", platformFee: "5% platform fee" },
+            { id: 21, name: "DreamWallets", website: "http://www.dreamwallets.com/", types: ["Reward", "Creative", "Social"], subscriptionFee: "On-request", platformFee: "Varies" },
+            { id: 22, name: "Crowdera", website: "https://gocrowdera.com/", types: ["Donation", "Social"], subscriptionFee: "Free", platformFee: "0% (platform fee)" },
+            { id: 23, name: "StartEngine", website: "https://www.startengine.com/", types: ["Equity", "Startup"], subscriptionFee: "For Companies", platformFee: "Varies" },
+            { id: 24, name: "Republic", website: "https://republic.co/", types: ["Equity", "Startup", "Crypto"], subscriptionFee: "N/A", platformFee: "Varies" }
+        ];
+
+        // All translations are embedded here
+        const translations = {
+            en: {
+                title: "Indian Crowdfunding Platforms",
+                subtitle: "A curated list of platforms enabling individuals and organizations to raise funds for various causes across India.",
+                sub_fee_label: "Subscription Fee:",
+                platform_fee_label: "Platform Fee:",
+                visit_website_link: "Visit Website →",
+                footer_text: "Information compiled for public awareness. Always verify details on the official platform websites.",
+                desc_1: "India's largest free crowdfunding platform for personal and social causes.",
+                desc_2: "Asia's most trusted crowdfunding platform for medical and social causes.",
+                desc_3: "India's leading medical crowdfunding platform for emergencies like cancer, transplants, and accidents.",
+                desc_4: "India's largest and most trustworthy giving platform for donors.",
+                desc_5: "A platform for people and organisations to raise funds for creative ideas, causes, charities, etc.",
+                desc_6: "A platform exclusively for creative artists to raise funds for projects like films, music, publishing, arts.",
+                desc_7: "A platform that supports creative projects, from films and music to comics and theatre.",
+                desc_8: "A crowdfunding platform for political campaigns, enabling citizens to support candidates.",
+                desc_9: "A leading platform for startup investing, connecting startups with accredited investors for funding.",
+                desc_10: "A platform that facilitates community investment in startups, allowing individuals to invest for equity or rewards.",
+                desc_11: "Enables donors to directly donate products to NGOs instead of money.",
+                desc_12: "A peer-to-peer lending platform that provides affordable credit to underserved communities.",
+                desc_13: "A platform for raising funds for medical expenses, creative projects, and personal needs.",
+                desc_14: "Focuses on reward-based crowdfunding for innovative products and ideas.",
+                desc_15: "India's largest peer-to-peer lending platform connecting borrowers with lenders.",
+                desc_16: "A peer-to-peer lending marketplace for personal loans and investing.",
+                desc_17: "International non-profit that allows people to lend money via the internet to low-income entrepreneurs.",
+                desc_18: "A major global crowdfunding platform for individuals, groups, and organizations.",
+                desc_19: "A leading peer-to-peer lending platform in India connecting salaried borrowers with investors.",
+                desc_20: "A global crowdfunding platform for creative projects, tech innovations, and community campaigns.",
+                desc_21: "A crowdfunding platform based in India for creative ideas and projects.",
+                desc_22: "A 100% free fundraising and crowdfunding platform for non-profits, social innovators, and individuals.",
+                desc_23: "An equity crowdfunding platform allowing everyday people to invest in early-stage companies.",
+                desc_24: "A platform for investing in startups, real estate, gaming, and crypto, open to everyone."
+            },
+            hi: {
+                title: "भारतीय क्राउडफंडिंग प्लेटफॉर्म",
+                subtitle: "भारत भर में विभिन्न कारणों से धन जुटाने के लिए व्यक्तियों और संगठनों को सक्षम करने वाले प्लेटफार्मों की एक क्यूरेटेड सूची।",
+                sub_fee_label: "सदस्यता शुल्क:",
+                platform_fee_label: "प्लेटफॉर्म शुल्क:",
+                visit_website_link: "वेबसाइट पर जाएं →",
+                footer_text: "जन जागरूकता के लिए संकलित जानकारी। आधिकारिक प्लेटफ़ॉर्म वेबसाइटों पर हमेशा विवरण सत्यापित करें।",
+                desc_1: "व्यक्तिगत और सामाजिक कारणों के लिए भारत का सबसे बड़ा मुफ्त क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_2: "चिकित्सा और सामाजिक कारणों के लिए एशिया का सबसे भरोसेमंद क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_3: "कैंसर, प्रत्यारोपण और दुर्घटनाओं जैसी आपात स्थितियों के लिए भारत का अग्रणी चिकित्सा क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_4: "दाताओं के लिए भारत का सबसे बड़ा और सबसे भरोसेमंद देने वाला मंच।",
+                desc_5: "रचनात्मक विचारों, कारणों, दान आदि के लिए धन जुटाने के लिए लोगों और संगठनों के लिए एक मंच।",
+                desc_6: "विशेष रूप से रचनात्मक कलाकारों के लिए फिल्मों, संगीत, प्रकाशन, कला जैसी परियोजनाओं के लिए धन जुटाने का एक मंच।",
+                desc_7: "एक मंच जो फिल्मों और संगीत से लेकर कॉमिक्स और थिएटर तक रचनात्मक परियोजनाओं का समर्थन करता है।",
+                desc_8: "राजनीतिक अभियानों के लिए एक क्राउडफंडिंग प्लेटफॉर्म, जो नागरिकों को उम्मीदवारों का समर्थन करने में सक्षम बनाता है।",
+                desc_9: "स्टार्टअप निवेश के लिए एक अग्रणी मंच, जो स्टार्टअप को वित्त पोषण के लिए मान्यता प्राप्त निवेशकों से जोड़ता है।",
+                desc_10: "एक ऐसा मंच जो स्टार्टअप में सामुदायिक निवेश की सुविधा देता है, जिससे व्यक्ति इक्विटी या पुरस्कार के लिए निवेश कर सकते हैं।",
+                desc_11: "दाताओं को पैसे के बजाय सीधे गैर-सरकारी संगठनों को उत्पाद दान करने में सक्षम बनाता है।",
+                desc_12: "एक पीयर-टू-पीयर लेंडिंग प्लेटफॉर्म जो वंचित समुदायों को किफायती ऋण प्रदान करता है।",
+                desc_13: "चिकित्सा खर्च, रचनात्मक परियोजनाओं और व्यक्तिगत जरूरतों के लिए धन जुटाने का एक मंच।",
+                desc_14: "अभिनव उत्पादों और विचारों के लिए इनाम-आधारित क्राउडफंडिंग पर ध्यान केंद्रित करता है।",
+                desc_15: "भारत का सबसे बड़ा पीयर-टू-पीयर लेंडिंग प्लेटफॉर्म जो उधारकर्ताओं को उधारदाताओं से जोड़ता है।",
+                desc_16: "व्यक्तिगत ऋण और निवेश के लिए एक पीयर-टू-पीयर लेंडिंग मार्केटप्लेस।",
+                desc_17: "अंतर्राष्ट्रीय गैर-लाभकारी संस्था जो लोगों को इंटरनेट के माध्यम से कम आय वाले उद्यमियों को पैसा उधार देने की अनुमति देती है।",
+                desc_18: "व्यक्तियों, समूहों और संगठनों के लिए एक प्रमुख वैश्विक क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_19: "भारत में एक अग्रणी पीयर-टू-पीयर लेंडिंग प्लेटफॉर्म जो वेतनभोगी उधारकर्ताओं को निवेशकों से जोड़ता है।",
+                desc_20: "रचनात्मक परियोजनाओं, तकनीकी नवाचारों और सामुदायिक अभियानों के लिए एक वैश्विक क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_21: "रचनात्मक विचारों और परियोजनाओं के लिए भारत में स्थित एक क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_22: "गैर-लाभकारी संस्थाओं, सामाजिक नवप्रवर्तकों और व्यक्तियों के लिए एक 100% मुफ्त धन उगाहने और क्राउडफंडिंग प्लेटफॉर्म।",
+                desc_23: "एक इक्विटी क्राउडफंडिंग प्लेटफॉर्म जो आम लोगों को शुरुआती चरण की कंपनियों में निवेश करने की अनुमति देता है।",
+                desc_24: "स्टार्टअप, रियल एस्टेट, गेमिंग और क्रिप्टो में निवेश के लिए एक मंच, जो सभी के लिए खुला है।"
+            },
+            ta: {
+                title: "இந்திய கிரவுட்ஃபண்டிங் தளங்கள்",
+                subtitle: "இந்தியா முழுவதும் பல்வேறு காரணங்களுக்காக நிதி திரட்ட தனிநபர்கள் மற்றும் நிறுவனங்களுக்கு உதவும் தளங்களின் தொகுக்கப்பட்ட பட்டியல்.",
+                sub_fee_label: "சந்தா கட்டணம்:",
+                platform_fee_label: "தளக் கட்டணம்:",
+                visit_website_link: "இணையதளத்தைப் பார்வையிடவும் →",
+                footer_text: "பொது விழிப்புணர்வுக்காக தொகுக்கப்பட்ட தகவல். அதிகாரப்பூர்வ தள இணையதளங்களில் விவரங்களை எப்போதும் சரிபார்க்கவும்.",
+                desc_1: "தனிப்பட்ட மற்றும் சமூக காரணங்களுக்காக இந்தியாவின் மிகப்பெரிய இலவச கிரவுட்ஃபண்டிங் தளம்.",
+                desc_2: "மருத்துவ மற்றும் சமூக காரணங்களுக்காக ஆசியாவின் மிகவும் நம்பகமான கிரவுட்ஃபண்டிங் தளம்.",
+                desc_3: "புற்றுநோய், மாற்று அறுவை சிகிச்சை மற்றும் விபத்துக்கள் போன்ற அவசரநிலைகளுக்கான இந்தியாவின் முன்னணி மருத்துவ கிரவுட்ஃபண்டிங் தளம்.",
+                desc_4: "நன்கொடையாளர்களுக்கான இந்தியாவின் மிகப்பெரிய மற்றும் மிகவும் நம்பகமான வழங்கும் தளம்.",
+                desc_5: "படைப்பு யோசனைகள், காரணங்கள், தொண்டு நிறுவனங்கள் போன்றவற்றிற்காக நிதி திரட்ட மக்கள் மற்றும் நிறுவனங்களுக்கான ஒரு தளம்.",
+                desc_6: "திரைப்படங்கள், இசை, பதிப்பகம், கலைகள் போன்ற திட்டங்களுக்கு நிதி திரட்ட படைப்புக் கலைஞர்களுக்கான ஒரு பிரத்யேக தளம்.",
+                desc_7: "திரைப்படங்கள் மற்றும் இசை முதல் காமிக்ஸ் மற்றும் நாடகம் வரை படைப்புத் திட்டங்களை ஆதரிக்கும் ஒரு தளம்.",
+                desc_8: "அரசியல் பிரச்சாரங்களுக்கான ஒரு கிரவுட்ஃபண்டிங் தளம், குடிமக்கள் வேட்பாளர்களை ஆதரிக்க உதவுகிறது.",
+                desc_9: "தொடக்கநிலை முதலீட்டிற்கான ஒரு முன்னணி தளம், தொடக்கநிலைகளை அங்கீகரிக்கப்பட்ட முதலீட்டாளர்களுடன் இணைக்கிறது.",
+                desc_10: "தொடக்கநிலைகளில் சமூக முதலீட்டை எளிதாக்கும் ஒரு தளம், தனிநபர்கள் சமபங்கு அல்லது வெகுமதிகளுக்காக முதலீடு செய்ய அனுமதிக்கிறது.",
+                desc_11: "நன்கொடையாளர்கள் பணத்திற்குப் பதிலாக நேரடியாக அரசு சாரா நிறுவனங்களுக்கு பொருட்களை நன்கொடையாக வழங்க உதவுகிறது.",
+                desc_12: "குறைந்த சேவை பெறும் சமூகங்களுக்கு மலிவு விலையில் கடன் வழங்கும் ஒரு பியர்-டு-பியர் கடன் வழங்கும் தளம்.",
+                desc_13: "மருத்துவச் செலவுகள், படைப்புத் திட்டங்கள் மற்றும் தனிப்பட்ட தேவைகளுக்காக நிதி திரட்டும் ஒரு தளம்.",
+                desc_14: "புதுமையான தயாரிப்புகள் மற்றும் யோசனைகளுக்கான வெகுமதி அடிப்படையிலான கிரவுட்ஃபண்டிங்கில் கவனம் செலுத்துகிறது.",
+                desc_15: "இந்தியாவின் மிகப்பெரிய பியர்-டு-பியர் கடன் வழங்கும் தளம், கடன் வாங்குபவர்களை கடன் கொடுப்பவர்களுடன் இணைக்கிறது.",
+                desc_16: "தனிநபர் கடன்கள் மற்றும் முதலீட்டிற்கான ஒரு பியர்-டு-பியர் கடன் வழங்கும் சந்தை.",
+                desc_17: "குறைந்த வருமானம் உடைய தொழில்முனைவோருக்கு இணையம் மூலம் பணம் கடன் கொடுக்க மக்களை அனுமதிக்கும் சர்வதேச இலாப நோக்கற்ற அமைப்பு.",
+                desc_18: "தனிநபர்கள், குழுக்கள் மற்றும் நிறுவனங்களுக்கான ஒரு முக்கிய உலகளாவிய கிரவுட்ஃபண்டிங் தளம்.",
+                desc_19: "இந்தியாவில் ஒரு முன்னணி பியர்-டு-பியர் கடன் வழங்கும் தளம், சம்பளம் பெறும் கடன் வாங்குபவர்களை முதலீட்டாளர்களுடன் இணைக்கிறது.",
+                desc_20: "படைப்புத் திட்டங்கள், தொழில்நுட்ப கண்டுபிடிப்புகள் மற்றும் சமூக பிரச்சாரங்களுக்கான ஒரு உலகளாவிய கிரவுட்ஃபண்டிங் தளம்.",
+                desc_21: "படைப்பு யோசனைகள் மற்றும் திட்டங்களுக்காக இந்தியாவில் அமைந்துள்ள ஒரு கிரவுட்ஃபண்டிங் தளம்.",
+                desc_22: "இலாப நோக்கற்ற நிறுவனங்கள், சமூக கண்டுபிடிப்பாளர்கள் மற்றும் தனிநபர்களுக்கான 100% இலவச நிதி திரட்டல் மற்றும் கிரவுட்ஃபண்டிங் தளம்.",
+                desc_23: "சாதாரண மக்கள் ஆரம்ப நிலை நிறுவனங்களில் முதலீடு செய்ய அனுமதிக்கும் ஒரு சமபங்கு கிரவுட்ஃபண்டிங் தளம்.",
+                desc_24: "தொடக்கநிலைகள், ரியல் எஸ்டேட், கேமிங் மற்றும் கிரிப்டோவில் முதலீடு செய்வதற்கான ஒரு தளம், அனைவருக்கும் திறந்திருக்கும்."
+            },
+            kn: {
+                title: "ಭಾರತೀಯ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ಗಳು",
+                subtitle: "ಭಾರತದಾದ್ಯಂತ ವಿವಿಧ ಕಾರಣಗಳಿಗಾಗಿ ಹಣವನ್ನು ಸಂಗ್ರಹಿಸಲು ವ್ಯಕ್ತಿಗಳು ಮತ್ತು ಸಂಸ್ಥೆಗಳಿಗೆ ಅನುವು ಮಾಡಿಕೊಡುವ ವೇದಿಕೆಗಳ ಸಂಗ್ರಹಿಸಲಾದ ಪಟ್ಟಿ.",
+                sub_fee_label: "ಚಂದಾದಾರಿಕೆ ಶುಲ್ಕ:",
+                platform_fee_label: "ವೇದಿಕೆ ಶುಲ್ಕ:",
+                visit_website_link: "ವೆಬ್‌ಸೈಟ್‌ಗೆ ಭೇಟಿ ನೀಡಿ →",
+                footer_text: "ಸಾರ್ವಜನಿಕ ಜಾಗೃತಿಗಾಗಿ ಸಂಕಲಿಸಿದ ಮಾಹಿತಿ. ಅಧಿಕೃತ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ವೆಬ್‌ಸೈಟ್‌ಗಳಲ್ಲಿ ಯಾವಾಗಲೂ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+                desc_1: "ವೈಯಕ್ತಿಕ ಮತ್ತು ಸಾಮಾಜಿಕ ಕಾರಣಗಳಿಗಾಗಿ ಭಾರತದ ಅತಿದೊಡ್ಡ ಉಚಿತ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_2: "ವೈದ್ಯಕೀಯ ಮತ್ತು ಸಾಮಾಜಿಕ ಕಾರಣಗಳಿಗಾಗಿ ಏಷ್ಯಾದ ಅತ್ಯಂತ ವಿಶ್ವಾಸಾರ್ಹ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_3: "ಕ್ಯಾನ್ಸರ್, ಕಸಿ ಮತ್ತು ಅಪಘಾತಗಳಂತಹ ತುರ್ತು ಪರಿಸ್ಥಿತಿಗಳಿಗಾಗಿ ಭಾರತದ ಪ್ರಮುಖ ವೈದ್ಯಕೀಯ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_4: "ದಾನಿಗಳಿಗಾಗಿ ಭಾರತದ ಅತಿದೊಡ್ಡ ಮತ್ತು ಅತ್ಯಂತ ವಿಶ್ವಾಸಾರ್ಹ ನೀಡುವ ವೇದಿಕೆ.",
+                desc_5: "ಸೃಜನಾತ್ಮಕ ಕಲ್ಪನೆಗಳು, ಕಾರಣಗಳು, ದತ್ತಿಗಳು ಇತ್ಯಾದಿಗಳಿಗಾಗಿ ಹಣವನ್ನು ಸಂಗ್ರಹಿಸಲು ಜನರು ಮತ್ತು ಸಂಸ್ಥೆಗಳಿಗೆ ಒಂದು ವೇದಿಕೆ.",
+                desc_6: "ಚಲನಚಿತ್ರಗಳು, ಸಂಗೀತ, ಪ್ರಕಾಶನ, ಕಲೆಗಳಂತಹ ಯೋಜನೆಗಳಿಗೆ ಹಣವನ್ನು ಸಂಗ್ರಹಿಸಲು ಸೃಜನಶೀಲ ಕಲಾವಿದರಿಗೆ ಪ್ರತ್ಯೇಕವಾಗಿ ಒಂದು ವೇದಿಕೆ.",
+                desc_7: "ಚಲನಚಿತ್ರಗಳು ಮತ್ತು ಸಂಗೀತದಿಂದ ಕಾಮಿಕ್ಸ್ ಮತ್ತು ರಂಗಭೂಮಿಯವರೆಗೆ ಸೃಜನಾತ್ಮಕ ಯೋಜನೆಗಳನ್ನು ಬೆಂಬಲಿಸುವ ವೇದಿಕೆ.",
+                desc_8: "ರಾಜಕೀಯ ಪ್ರಚಾರಗಳಿಗಾಗಿ ಒಂದು ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ, ನಾಗರಿಕರಿಗೆ ಅಭ್ಯರ್ಥಿಗಳನ್ನು ಬೆಂಬಲಿಸಲು ಅನುವು ಮಾಡಿಕೊಡುತ್ತದೆ.",
+                desc_9: "ಸ್ಟಾರ್ಟ್‌ಅಪ್ ಹೂಡಿಕೆಗಾಗಿ ಒಂದು ಪ್ರಮುಖ ವೇದಿಕೆ, ಸ್ಟಾರ್ಟ್‌ಅಪ್‌ಗಳನ್ನು ಮಾನ್ಯತೆ ಪಡೆದ ಹೂಡಿಕೆದಾರರೊಂದಿಗೆ ಸಂಪರ್ಕಿಸುತ್ತದೆ.",
+                desc_10: "ಸ್ಟಾರ್ಟ್‌ಅಪ್‌ಗಳಲ್ಲಿ ಸಮುದಾಯ ಹೂಡಿಕೆಯನ್ನು ಸುಲಭಗೊಳಿಸುವ ವೇದಿಕೆ, ವ್ಯಕ್ತಿಗಳಿಗೆ ಇಕ್ವಿಟಿ ಅಥವಾ ಪ್ರತಿಫಲಕ್ಕಾಗಿ ಹೂಡಿಕೆ ಮಾಡಲು ಅನುವು ಮಾಡಿಕೊಡುತ್ತದೆ.",
+                desc_11: "ದಾನಿಗಳಿಗೆ ಹಣದ ಬದಲು ನೇರವಾಗಿ ಎನ್‌ಜಿಒಗಳಿಗೆ ಉತ್ಪನ್ನಗಳನ್ನು ದಾನ ಮಾಡಲು ಅನುವು ಮಾಡಿಕೊಡುತ್ತದೆ.",
+                desc_12: "ಕಡಿಮೆ ಸೇವೆ ಸಲ್ಲಿಸಿದ ಸಮುದಾಯಗಳಿಗೆ ಕೈಗೆಟುಕುವ ಸಾಲವನ್ನು ಒದಗಿಸುವ ಪೀರ್-ಟು-ಪೀರ್ ಸಾಲ ನೀಡುವ ವೇದಿಕೆ.",
+                desc_13: "ವೈದ್ಯಕೀಯ ವೆಚ್ಚಗಳು, ಸೃಜನಾತ್ಮಕ ಯೋಜನೆಗಳು ಮತ್ತು ವೈಯಕ್ತಿಕ ಅಗತ್ಯಗಳಿಗಾಗಿ ಹಣವನ್ನು ಸಂಗ್ರಹಿಸುವ ವೇದಿಕೆ.",
+                desc_14: "ನವೀನ ಉತ್ಪನ್ನಗಳು ಮತ್ತು ಕಲ್ಪನೆಗಳಿಗಾಗಿ ಪ್ರತಿಫಲ-ಆಧಾರಿತ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ಮೇಲೆ ಕೇಂದ್ರೀಕರಿಸುತ್ತದೆ.",
+                desc_15: "ಭಾರತದ ಅತಿದೊಡ್ಡ ಪೀರ್-ಟು-ಪೀರ್ ಸಾಲ ನೀಡುವ ವೇದಿಕೆ, ಸಾಲಗಾರರನ್ನು ಸಾಲದಾತರೊಂದಿಗೆ ಸಂಪರ್ಕಿಸುತ್ತದೆ.",
+                desc_16: "ವೈಯಕ್ತಿಕ ಸಾಲಗಳು ಮತ್ತು ಹೂಡಿಕೆಗಾಗಿ ಪೀರ್-ಟು-ಪೀರ್ ಸಾಲ ನೀಡುವ ಮಾರುಕಟ್ಟೆ.",
+                desc_17: "ಅಂತರರಾಷ್ಟ್ರೀಯ ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥೆ, ಕಡಿಮೆ-ಆದಾಯದ ಉದ್ಯಮಿಗಳಿಗೆ ಇಂಟರ್ನೆಟ್ ಮೂಲಕ ಹಣವನ್ನು ಸಾಲ ನೀಡಲು ಜನರಿಗೆ ಅನುವು ಮಾಡಿಕೊಡುತ್ತದೆ.",
+                desc_18: "ವ್ಯಕ್ತಿಗಳು, ಗುಂಪುಗಳು ಮತ್ತು ಸಂಸ್ಥೆಗಳಿಗೆ ಒಂದು ಪ್ರಮುಖ ಜಾಗತಿಕ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_19: "ಭಾರತದಲ್ಲಿ ಪ್ರಮುಖ ಪೀರ್-ಟು-ಪೀರ್ ಸಾಲ ನೀಡುವ ವೇದಿಕೆ, ಸಂಬಳ ಪಡೆಯುವ ಸಾಲಗಾರರನ್ನು ಹೂಡಿಕೆದಾರರೊಂದಿಗೆ ಸಂಪರ್ಕಿಸುತ್ತದೆ.",
+                desc_20: "ಸೃಜನಾತ್ಮಕ ಯೋಜನೆಗಳು, ತಂತ್ರಜ್ಞಾನ ನಾವೀನ್ಯತೆಗಳು ಮತ್ತು ಸಮುದಾಯ ಪ್ರಚಾರಗಳಿಗಾಗಿ ಜಾಗತಿಕ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_21: "ಸೃಜನಾತ್ಮಕ ಕಲ್ಪನೆಗಳು ಮತ್ತು ಯೋಜನೆಗಳಿಗಾಗಿ ಭಾರತದಲ್ಲಿ ನೆಲೆಗೊಂಡಿರುವ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_22: "ಲಾಭೋದ್ದೇಶವಿಲ್ಲದ ಸಂಸ್ಥೆಗಳು, ಸಾಮಾಜಿಕ ನಾವೀನ್ಯಕಾರರು ಮತ್ತು ವ್ಯಕ್ತಿಗಳಿಗೆ 100% ಉಚಿತ ನಿಧಿಸಂಗ್ರಹಣೆ ಮತ್ತು ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_23: "ಸಾಮಾನ್ಯ ಜನರಿಗೆ ಆರಂಭಿಕ ಹಂತದ ಕಂಪನಿಗಳಲ್ಲಿ ಹೂಡಿಕೆ ಮಾಡಲು ಅನುವು ಮಾಡಿಕೊಡುವ ಇಕ್ವಿಟಿ ಕ್ರೌಡ್‌ಫಂಡಿಂಗ್ ವೇದಿಕೆ.",
+                desc_24: "ಸ್ಟಾರ್ಟ್‌ಅಪ್‌ಗಳು, ರಿಯಲ್ ಎಸ್ಟೇಟ್, ಗೇಮಿಂಗ್ ಮತ್ತು ಕ್ರಿಪ್ಟೋದಲ್ಲಿ ಹೂಡಿಕೆ ಮಾಡಲು ಒಂದು ವೇದಿಕೆ, ಎಲ್ಲರಿಗೂ ತೆರೆದಿರುತ್ತದೆ."
+            }
+        };
+
+        const platformsGrid = document.getElementById('platforms-grid');
+        const languageSelect = document.getElementById('language-select');
+
+        /**
+         * Renders the platform cards on the page.
+         * @param {string} lang The language code to render.
+         */
+        function renderPage(lang) {
+            const t = translations[lang];
+
+            // Translate static UI text
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                if (t[key]) {
+                    el.innerText = t[key];
+                }
+            });
+
+            // Clear and render platform cards
+            platformsGrid.innerHTML = '';
+            platformsData.forEach(platform => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300 flex";
+                
+                // Get platform-specific description from translations
+                const description = t[`desc_${platform.id}`] || platform.description;
+
+                card.innerHTML = `
+                    <div class="p-6 card-content">
+                        <div class="card-body">
+                            <h3 class="text-xl font-bold text-gray-900">${platform.name}</h3>
+                            <p class="mt-2 text-gray-600 text-base">${description}</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                ${platform.types.map(type => `<span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">${type}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                             <div class="space-y-2 text-sm">
+                                <p class="flex justify-between">
+                                    <span class="text-gray-500">${t.sub_fee_label}</span>
+                                    <span class="font-semibold text-gray-800">${platform.subscriptionFee}</span>
+                                </p>
+                                <p class="flex justify-between">
+                                    <span class="text-gray-500">${t.platform_fee_label}</span>
+                                    <span class="font-semibold text-gray-800">${platform.platformFee}</span>
+                                </p>
+                            </div>
+                            <div class="mt-6">
+                                <a href="${platform.website}" target="_blank" rel="noopener noreferrer" class="font-semibold text-orange-600 hover:text-orange-700">
+                                    ${t.visit_website_link}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                platformsGrid.appendChild(card);
+            });
+        }
+        
+        // --- Event Listener ---
+        languageSelect.addEventListener('change', (e) => {
+            renderPage(e.target.value);
+        });
+
+        // --- Initial Load ---
+        window.onload = () => {
+            renderPage('en'); // Load English by default
+        };
+    </script>
+</body>
+</html>
