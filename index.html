@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Crowdfunding Campaign Workbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom colors inspired by indiapartnernetwork.org */
+        .ipn-blue { color: #004AAD; }
+        .bg-ipn-blue { background-color: #004AAD; }
+        .border-ipn-blue { border-color: #004AAD; }
+        .ipn-orange { color: #F26522; }
+        .bg-ipn-orange { background-color: #F26522; }
+        .border-ipn-orange { border-color: #F26522; }
+        .bg-light-gray { background-color: #f8f9fa; }
+
+        .step-indicator {
+            transition: all 0.3s ease-in-out;
+        }
+        .step-indicator.active {
+            background-color: #004AAD;
+            color: white;
+            border-color: #004AAD;
+        }
+        .step-indicator.completed {
+            background-color: #16a34a; /* Green-600 */
+            color: white;
+            border-color: #16a34a;
+        }
+
+        .step-content {
+            display: none;
+        }
+        .step-content.active {
+            display: block;
+        }
+        
+        /* Custom focus rings */
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #F26522;
+            border-color: #F26522;
+        }
+        
+        .btn {
+            @apply px-6 py-2 rounded-lg font-semibold text-white transition-transform transform hover:scale-105 shadow-md;
+        }
+        .btn-primary {
+            @apply bg-ipn-blue hover:bg-blue-800;
+        }
+        .btn-secondary {
+            @apply bg-ipn-orange hover:bg-orange-600;
+        }
+        .btn-gray {
+             @apply bg-gray-500 hover:bg-gray-600;
+        }
+    </style>
+</head>
+<body class="bg-light-gray text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-ipn-blue p-2 rounded-lg">
+                        <i data-lucide="goal" class="text-white"></i>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-bold ipn-blue">Crowdfunding Workbook</h1>
+                </div>
+                <button id="reviewButton" class="btn btn-secondary flex items-center space-x-2">
+                    <i data-lucide="clipboard-list"></i>
+                    <span>Review Plan</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Progress Stepper -->
+        <div id="stepper" class="flex flex-col sm:flex-row items-center justify-between mb-8 overflow-x-auto pb-4">
+            <!-- Steps will be injected here by JS -->
+        </div>
+
+        <div id="workbook-content" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+            <!-- Introduction -->
+            <div id="step-0" class="step-content active">
+                <h2 class="text-3xl font-bold mb-4 ipn-blue">Plan Your Successful Crowdfunding Campaign</h2>
+                <p class="text-lg mb-4 text-gray-600">Crowdfunding is a powerful way to raise money from a large number of people who believe in your cause. This workbook will guide you through the essential steps to prepare a campaign that inspires and succeeds.</p>
+                <p class="mb-6">Answer the questions in each step to build a comprehensive plan. When you're done, you can review and save your entire campaign strategy.</p>
+                <div class="bg-blue-50 border-l-4 border-ipn-blue p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="py-1"><i data-lucide="info" class="h-5 w-5 ipn-blue mr-3"></i></div>
+                        <div>
+                            <p class="text-sm text-blue-700">Let's begin by defining a clear goal for your campaign. Click "Start Planning" to move to Step 1.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Set a Clear Goal -->
+            <form id="step-1" class="step-content space-y-6">
+                <h2 class="text-2xl font-bold ipn-blue">Step 1: Set a Clear Goal</h2>
+                <p class="text-gray-600">A clear, SMART (Specific, Measurable, Actionable, Realistic, Time-bound) goal is the foundation of your campaign. Answer the following to define your goal.</p>
+                
+                <div>
+                    <label for="goal-specific" class="block text-lg font-semibold text-gray-700 mb-2">What exactly are you trying to achieve, and why?</label>
+                    <textarea id="goal-specific" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Raise $10,000 to provide winter clothing for 500 children in our community."></textarea>
+                </div>
+
+                <div>
+                    <label for="goal-measurable" class="block text-lg font-semibold text-gray-700 mb-2">How will you measure success?</label>
+                    <input type="text" id="goal-measurable" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Fundraising target of $10,000, 200 unique donors.">
+                </div>
+
+                <div>
+                    <label for="goal-realistic" class="block text-lg font-semibold text-gray-700 mb-2">Is your target realistic with your resources and timeframe?</label>
+                    <input type="text" id="goal-realistic" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Yes, based on our past campaigns and current donor list of 1000 people.">
+                </div>
+
+                <div>
+                    <label for="goal-timebound" class="block text-lg font-semibold text-gray-700 mb-2">What is your campaign timeline?</label>
+                    <input type="text" id="goal-timebound" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., The campaign will run for 4 weeks, from November 1st to November 30th.">
+                </div>
+                 <div>
+                    <label for="goal-title" class="block text-lg font-semibold text-gray-700 mb-2">Craft a strong, action-oriented campaign title.</label>
+                    <input type="text" id="goal-title" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 'Warm a Heart: Winter Kits for Kids'">
+                </div>
+            </form>
+
+            <!-- Step 2: Pick the Right Platform -->
+            <form id="step-2" class="step-content space-y-6">
+                <h2 class="text-2xl font-bold ipn-blue">Step 2: Pick the Right Platform</h2>
+                <p class="text-gray-600">Where will your campaign live? Your choice affects cost, features, and donor experience.</p>
+                 <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">How will you host your campaign?</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="radio" name="platform" value="own-website" class="h-4 w-4 text-ipn-blue focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">On our own website (e.g., upgrading our 'Donate' page)</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="radio" name="platform" value="third-party" class="h-4 w-4 text-ipn-blue focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">On a third-party crowdfunding platform (e.g., Ketto, Impact Guru, GiveIndia)</span>
+                        </label>
+                         <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="radio" name="platform" value="embedded" class="h-4 w-4 text-ipn-blue focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Embed a third-party campaign onto our website</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="platform-reason" class="block text-lg font-semibold text-gray-700 mb-2">Why did you choose this option?</label>
+                    <textarea id="platform-reason" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., A third-party platform offers better visibility and handles payment processing, which we lack the resources for."></textarea>
+                </div>
+            </form>
+
+            <!-- Step 3: Define KPIs -->
+            <form id="step-3" class="step-content space-y-6">
+                 <h2 class="text-2xl font-bold ipn-blue">Step 3: Define Key Performance Indicators (KPIs)</h2>
+                 <p class="text-gray-600">Beyond the main goal, how will you measure the health and success of your campaign?</p>
+                 <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Select the KPIs you will track:</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="kpi" value="donor-retention" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Donor Retention Rate</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="kpi" value="donation-size" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Average Donation Size</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="kpi" value="fundraising-roi" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Fundraising ROI</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="kpi" value="conversion-rate" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Donation Page Conversion Rate</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="kpi" value="recurring-donors" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Number of Recurring Donors</span>
+                        </label>
+                    </div>
+                </div>
+                 <div>
+                    <label for="kpi-other" class="block text-lg font-semibold text-gray-700 mb-2">Any other specific KPIs?</label>
+                    <input type="text" id="kpi-other" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Number of social media shares, media mentions.">
+                </div>
+            </form>
+
+            <!-- Step 4: Plan Promotion -->
+            <form id="step-4" class="step-content space-y-6">
+                <h2 class="text-2xl font-bold ipn-blue">Step 4: Plan Your Promotion Activities</h2>
+                <p class="text-gray-600">A great campaign needs a great promotion plan. How will you reach your audience?</p>
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Which channels will you use?</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="promotion" value="social-media" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Social Media Updates (Posts, Videos, Lives)</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="promotion" value="email-outreach" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Email Outreach to existing network</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="promotion" value="paid-ads" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Paid Advertisements (Facebook, Google)</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue">
+                            <input type="checkbox" name="promotion" value="press-release" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange">
+                            <span class="ml-3 text-gray-700">Press Release / Media Outreach</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="promotion-plan" class="block text-lg font-semibold text-gray-700 mb-2">Outline your promotion strategy.</label>
+                    <textarea id="promotion-plan" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Week 1: Launch emails and social media blast. Week 2: Share beneficiary stories. Week 3: Mid-campaign push with a matching challenge. Week 4: Final 48-hour countdown."></textarea>
+                </div>
+            </form>
+
+            <!-- Step 5: Build Campaign Assets -->
+            <form id="step-5" class="step-content space-y-6">
+                <h2 class="text-2xl font-bold ipn-blue">Step 5: Build Campaign Assets</h2>
+                <p class="text-gray-600">These are the materials you'll use to promote your campaign. What do you need to create?</p>
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Check the assets you will develop:</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue"><input type="checkbox" name="asset" value="case-study" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange"><span class="ml-3 text-gray-700">Case Study / Story Graphic</span></label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue"><input type="checkbox" name="asset" value="video" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange"><span class="ml-3 text-gray-700">Campaign Video / Testimonials</span></label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue"><input type="checkbox" name="asset" value="impact-infographic" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange"><span class="ml-3 text-gray-700">Impact Infographic</span></label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue"><input type="checkbox" name="asset" value="email-templates" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange"><span class="ml-3 text-gray-700">Email Templates (Launch, Reminder, Thank You)</span></label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue"><input type="checkbox" name="asset" value="call-scripts" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange"><span class="ml-3 text-gray-700">Call Scripts for personal outreach</span></label>
+                        <label class="flex items-center p-3 border border-gray-300 rounded-lg has-[:checked]:bg-blue-50 has-[:checked]:border-ipn-blue"><input type="checkbox" name="asset" value="social-media-kit" class="h-4 w-4 text-ipn-blue rounded focus:ring-ipn-orange"><span class="ml-3 text-gray-700">Social Media Blurbs & Images</span></label>
+                    </div>
+                </div>
+                 <div>
+                    <label for="asset-timeline" class="block text-lg font-semibold text-gray-700 mb-2">Who is responsible for what, and what are the deadlines?</label>
+                    <textarea id="asset-timeline" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Video - Sarah (Due Oct 15). Email copy - Mark (Due Oct 20). Graphics - Design Team (Due Oct 22)."></textarea>
+                </div>
+            </form>
+
+            <!-- Step 6: Design a Strong Appeal -->
+            <form id="step-6" class="step-content space-y-6">
+                <h2 class="text-2xl font-bold ipn-blue">Step 6: Design a Strong Appeal</h2>
+                <p class="text-gray-600">Your story is what connects with donors. Draft a compelling narrative that is simple, personal, and shows clear impact.</p>
+                <div>
+                    <label for="appeal-story" class="block text-lg font-semibold text-gray-700 mb-2">Draft your core campaign story. Make it personal and easy to understand.</label>
+                    <textarea id="appeal-story" rows="6" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Start with a person. 'Meet Maya, a bright 7-year-old who dreams of becoming a doctor. But without warm clothes, she often misses school during the harsh winter...'"></textarea>
+                </div>
+                <div>
+                    <label for="appeal-accountability" class="block text-lg font-semibold text-gray-700 mb-2">How will you show donors their specific impact?</label>
+                    <input type="text" id="appeal-accountability" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 'A donation of $20 provides one child with a complete winter kit: a jacket, gloves, and a hat.'">
+                </div>
+                 <div>
+                    <label for="appeal-cta" class="block text-lg font-semibold text-gray-700 mb-2">What is your primary Call-to-Action (CTA)?</label>
+                    <input type="text" id="appeal-cta" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 'Donate Now to Keep a Child Warm'">
+                </div>
+            </form>
+
+            <!-- Step 7: Focus on the Follow-Up -->
+            <form id="step-7" class="step-content space-y-6">
+                 <h2 class="text-2xl font-bold ipn-blue">Step 7: Focus on the Follow-Up</h2>
+                 <p class="text-gray-600">The campaign doesn't end with a donation. Plan how you'll thank and retain your supporters.</p>
+                <div>
+                    <label for="followup-thankyou" class="block text-lg font-semibold text-gray-700 mb-2">How will you thank donors immediately?</label>
+                    <textarea id="followup-thankyou" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., An automated, personalized thank-you email with a short video from our team. For donations over $100, a personal call."></textarea>
+                </div>
+                 <div>
+                    <label for="followup-updates" class="block text-lg font-semibold text-gray-700 mb-2">How will you keep donors updated on the campaign's progress and impact?</label>
+                    <textarea id="followup-updates" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., Weekly email updates with fundraising totals and stories. A final impact report one month after the campaign ends, showing photos of the children with their winter kits."></textarea>
+                </div>
+            </form>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
+                <button id="prevBtn" class="btn btn-gray flex items-center space-x-2 invisible">
+                    <i data-lucide="arrow-left"></i>
+                    <span>Previous</span>
+                </button>
+                <button id="nextBtn" class="btn btn-primary flex items-center space-x-2">
+                    <span id="nextBtnText">Start Planning</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Summary -->
+    <div id="summaryModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold ipn-blue">Your Crowdfunding Campaign Plan</h2>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div id="summaryContent" class="p-6 overflow-y-auto space-y-6">
+                <!-- Summary content will be injected here -->
+            </div>
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-4 bg-light-gray rounded-b-2xl">
+                 <button id="copySummaryBtn" class="btn btn-secondary flex items-center space-x-2">
+                    <i data-lucide="copy"></i>
+                    <span>Copy Plan</span>
+                </button>
+                <button id="printSummaryBtn" class="btn btn-primary flex items-center space-x-2">
+                    <i data-lucide="printer"></i>
+                    <span>Print Plan</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            const steps = [
+                { id: 1, name: 'Set Goal', icon: 'flag' },
+                { id: 2, name: 'Choose Platform', icon: 'layout-template' },
+                { id: 3, name: 'Define KPIs', icon: 'bar-chart-2' },
+                { id: 4, name: 'Plan Promotion', icon: 'megaphone' },
+                { id: 5, name: 'Build Assets', icon: 'folder-kanban' },
+                { id: 6, name: 'Design Appeal', icon: 'heart-handshake' },
+                { id: 7, name: 'Plan Follow-up', icon: 'send' },
+            ];
+
+            const stepperContainer = document.getElementById('stepper');
+            steps.forEach((step, index) => {
+                const isFirst = index === 0;
+                const stepEl = document.createElement('div');
+                stepEl.className = 'flex items-center space-x-2';
+
+                stepEl.innerHTML = `
+                    ${!isFirst ? '<div class="flex-grow h-0.5 bg-gray-300 w-8 sm:w-16"></div>' : ''}
+                    <div id="step-indicator-${step.id}" class="step-indicator flex items-center justify-center w-10 h-10 border-2 border-gray-300 rounded-full">
+                        <i data-lucide="${step.icon}" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-600 hidden md:block">${step.name}</span>
+                `;
+                stepperContainer.appendChild(stepEl);
+            });
+            
+            lucide.createIcons();
+
+            let currentStep = 0;
+            const totalSteps = steps.length;
+            const stepContents = document.querySelectorAll('.step-content');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const nextBtnText = document.getElementById('nextBtnText');
+            
+            const summaryModal = document.getElementById('summaryModal');
+            const reviewButton = document.getElementById('reviewButton');
+            const closeModal = document.getElementById('closeModal');
+            const copySummaryBtn = document.getElementById('copySummaryBtn');
+
+            function updateStepUI() {
+                // Handle content visibility
+                stepContents.forEach((content, index) => {
+                    content.classList.toggle('active', index === currentStep);
+                });
+
+                // Handle stepper indicators
+                document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                    indicator.classList.remove('active', 'completed');
+                    const stepId = parseInt(indicator.id.split('-')[2]);
+                    if (stepId < currentStep) {
+                        indicator.classList.add('completed');
+                    } else if (stepId === currentStep && currentStep > 0) {
+                         indicator.classList.add('active');
+                    }
+                });
+                // Activate first step indicator on load
+                if (currentStep === 1) {
+                     document.getElementById('step-indicator-1').classList.add('active');
+                }
+
+                // Handle button visibility and text
+                prevBtn.classList.toggle('invisible', currentStep === 0);
+                nextBtn.classList.toggle('invisible', currentStep > totalSteps);
+
+                if (currentStep === 0) {
+                    nextBtnText.textContent = 'Start Planning';
+                } else if (currentStep === totalSteps) {
+                    nextBtnText.textContent = 'Finish & Review';
+                } else {
+                    nextBtnText.textContent = 'Next Step';
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep <= totalSteps) {
+                    // Mark previous step as completed
+                    if(currentStep > 0) {
+                        document.getElementById(`step-indicator-${currentStep}`).classList.add('completed');
+                        document.getElementById(`step-indicator-${currentStep}`).classList.remove('active');
+                    }
+                    
+                    currentStep++;
+
+                    if (currentStep > totalSteps) {
+                        showSummary();
+                    } else {
+                        updateStepUI();
+                    }
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateStepUI();
+                }
+            });
+
+            reviewButton.addEventListener('click', showSummary);
+            closeModal.addEventListener('click', () => summaryModal.classList.add('hidden'));
+
+            function getFormValues() {
+                const plan = {};
+                // Step 1
+                plan.goal = {
+                    title: document.getElementById('goal-title').value,
+                    specific: document.getElementById('goal-specific').value,
+                    measurable: document.getElementById('goal-measurable').value,
+                    realistic: document.getElementById('goal-realistic').value,
+                    timebound: document.getElementById('goal-timebound').value,
+                };
+                // Step 2
+                plan.platform = {
+                    choice: document.querySelector('input[name="platform"]:checked')?.value,
+                    reason: document.getElementById('platform-reason').value
+                };
+                // Step 3
+                plan.kpis = {
+                    selected: Array.from(document.querySelectorAll('input[name="kpi"]:checked')).map(el => el.parentElement.textContent.trim()),
+                    other: document.getElementById('kpi-other').value
+                };
+                // Step 4
+                plan.promotion = {
+                    channels: Array.from(document.querySelectorAll('input[name="promotion"]:checked')).map(el => el.parentElement.textContent.trim()),
+                    plan: document.getElementById('promotion-plan').value
+                };
+                // Step 5
+                plan.assets = {
+                    list: Array.from(document.querySelectorAll('input[name="asset"]:checked')).map(el => el.parentElement.textContent.trim()),
+                    timeline: document.getElementById('asset-timeline').value
+                };
+                // Step 6
+                plan.appeal = {
+                    story: document.getElementById('appeal-story').value,
+                    accountability: document.getElementById('appeal-accountability').value,
+                    cta: document.getElementById('appeal-cta').value,
+                };
+                // Step 7
+                plan.followup = {
+                    thankyou: document.getElementById('followup-thankyou').value,
+                    updates: document.getElementById('followup-updates').value
+                };
+                return plan;
+            }
+            
+            function generateSummaryHTML(plan) {
+                const renderList = (items) => items.length ? `<ul>${items.map(i => `<li class="ml-4 list-disc">${i}</li>`).join('')}</ul>` : '<p class="text-gray-500 italic">Not specified.</p>';
+                const renderText = (text) => text ? `<p class="whitespace-pre-wrap">${text}</p>` : '<p class="text-gray-500 italic">Not specified.</p>';
+                
+                return `
+                    <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">1. Campaign Goal</h3>
+                        <p><strong>Title:</strong> ${plan.goal.title || 'N/A'}</p>
+                        <p><strong>Specific Goal:</strong> ${renderText(plan.goal.specific)}</p>
+                        <p><strong>Measurement:</strong> ${renderText(plan.goal.measurable)}</p>
+                        <p><strong>Realistic Check:</strong> ${renderText(plan.goal.realistic)}</p>
+                        <p><strong>Timeline:</strong> ${renderText(plan.goal.timebound)}</p>
+                    </div>
+                     <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">2. Platform</h3>
+                        <p><strong>Choice:</strong> ${plan.platform.choice || 'N/A'}</p>
+                        <p><strong>Reasoning:</strong> ${renderText(plan.platform.reason)}</p>
+                    </div>
+                     <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">3. Key Performance Indicators (KPIs)</h3>
+                        ${renderList(plan.kpis.selected)}
+                        ${plan.kpis.other ? `<p><strong>Other:</strong> ${plan.kpis.other}</p>`: ''}
+                    </div>
+                    <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">4. Promotion Plan</h3>
+                        <p><strong>Channels:</strong></p>
+                        ${renderList(plan.promotion.channels)}
+                        <p class="mt-2"><strong>Strategy:</strong></p>
+                        ${renderText(plan.promotion.plan)}
+                    </div>
+                     <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">5. Campaign Assets</h3>
+                        <p><strong>Asset Checklist:</strong></p>
+                        ${renderList(plan.assets.list)}
+                        <p class="mt-2"><strong>Responsibilities & Timeline:</strong></p>
+                        ${renderText(plan.assets.timeline)}
+                    </div>
+                     <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">6. Campaign Appeal</h3>
+                        <p><strong>Core Story:</strong></p>
+                        ${renderText(plan.appeal.story)}
+                        <p class="mt-2"><strong>Impact & Accountability:</strong></p>
+                        ${renderText(plan.appeal.accountability)}
+                        <p class="mt-2"><strong>Call-to-Action:</strong></p>
+                        ${renderText(plan.appeal.cta)}
+                    </div>
+                     <div class="summary-section">
+                        <h3 class="font-bold text-lg mb-2 ipn-orange">7. Follow-Up Plan</h3>
+                        <p><strong>Immediate Thank You:</strong></p>
+                        ${renderText(plan.followup.thankyou)}
+                        <p class="mt-2"><strong>Updates & Engagement:</strong></p>
+                        ${renderText(plan.followup.updates)}
+                    </div>
+                `;
+            }
+
+            function showSummary() {
+                const plan = getFormValues();
+                const summaryContent = document.getElementById('summaryContent');
+                summaryContent.innerHTML = generateSummaryHTML(plan);
+                summaryModal.classList.remove('hidden');
+                summaryModal.classList.add('flex');
+            }
+            
+            function generateSummaryText(plan) {
+                return `
+CROWDFUNDING CAMPAIGN PLAN
+==================================
+
+1. CAMPAIGN GOAL
+----------------
+Title: ${plan.goal.title || 'N/A'}
+Specific Goal: ${plan.goal.specific || 'N/A'}
+Measurement: ${plan.goal.measurable || 'N/A'}
+Realistic Check: ${plan.goal.realistic || 'N/A'}
+Timeline: ${plan.goal.timebound || 'N/A'}
+
+2. PLATFORM
+----------------
+Choice: ${plan.platform.choice || 'N/A'}
+Reasoning: ${plan.platform.reason || 'N/A'}
+
+3. KEY PERFORMANCE INDICATORS (KPIs)
+----------------
+- ${plan.kpis.selected.join('\n- ') || 'N/A'}
+Other: ${plan.kpis.other || 'N/A'}
+
+4. PROMOTION PLAN
+----------------
+Channels:
+- ${plan.promotion.channels.join('\n- ') || 'N/A'}
+
+Strategy:
+${plan.promotion.plan || 'N/A'}
+
+5. CAMPAIGN ASSETS
+----------------
+Asset Checklist:
+- ${plan.assets.list.join('\n- ') || 'N/A'}
+
+Responsibilities & Timeline:
+${plan.assets.timeline || 'N/A'}
+
+6. CAMPAIGN APPEAL
+----------------
+Core Story:
+${plan.appeal.story || 'N/A'}
+
+Impact & Accountability:
+${plan.appeal.accountability || 'N/A'}
+
+Call-to-Action:
+${plan.appeal.cta || 'N/A'}
+
+7. FOLLOW-UP PLAN
+----------------
+Immediate Thank You:
+${plan.followup.thankyou || 'N/A'}
+
+Updates & Engagement:
+${plan.followup.updates || 'N/A'}
+                `;
+            }
+
+            copySummaryBtn.addEventListener('click', () => {
+                const plan = getFormValues();
+                const textToCopy = generateSummaryText(plan);
+
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copySummaryBtn.innerHTML = '<i data-lucide="check"></i> <span>Copied!</span>';
+                    lucide.createIcons();
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    copySummaryBtn.innerHTML = '<i data-lucide="x"></i> <span>Failed</span>';
+                    lucide.createIcons();
+                }
+                document.body.removeChild(textArea);
+                setTimeout(() => {
+                    copySummaryBtn.innerHTML = '<i data-lucide="copy"></i> <span>Copy Plan</span>';
+                    lucide.createIcons();
+                }, 2000);
+            });
+            
+            document.getElementById('printSummaryBtn').addEventListener('click', () => {
+                const summaryContent = document.getElementById('summaryContent').innerHTML;
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Crowdfunding Campaign Plan</title>
+                            <style>
+                                body { font-family: sans-serif; line-height: 1.5; }
+                                .summary-section { margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; }
+                                h3 { font-size: 1.2rem; color: #F26522; }
+                                ul { padding-left: 20px; }
+                                p { white-space: pre-wrap; }
+                            </style>
+                        </head>
+                        <body>${summaryContent}</body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.print();
+            });
+
+            // Initial UI setup
+            updateStepUI();
+        });
+    </script>
+</body>
+</html>
